@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-	System.out.println("安阿");
+	System.out.println("安阿87");
         // 設置初始村名數量
         Villager villagers = new Villager();
         villagers.villagerLife(1);
