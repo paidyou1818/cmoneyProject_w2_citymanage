@@ -1,19 +1,26 @@
-package cmoneyweek1citymanage;
 
-/**
- * 建造一個起始資源類別
- */
+
 public class Resource {
-    public int wood; //木材量
-    public int steel; //鋼鐵量
-    public int gas; //瓦斯量
-    public int woodPeople;//採集木材人數
-    public int steelPeople;//採集鋼鐵人數
-    public int gasPeople;//採集瓦斯人數
-    public int woodRate = 3;//採集木材效率
-    public int steelRate = 1;//採集鋼鐵效率
-    public int gasRate = 0;//採集瓦斯效率
+    public int wood;
+    public int steel;
+    public int gas;
+    public int woodPeople;
+    public int steelPeople;
+    public int gasPeople;
+    public int woodRate = 3;
+    public int steelRate = 1;
+    public int gasRate = 0;
+    
+    public Resource(){
+        
+    }
 
+    public Resource(int wood, int steel, int gas) {
+        this.wood = wood;
+        this.steel = steel;
+        this.gas = gas;
+    }
+    
     public int getWood() {
         return wood;
     }
