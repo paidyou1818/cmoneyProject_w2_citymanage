@@ -1,3 +1,5 @@
+package cmoneyweek1citymanage;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,45 @@ public class NewStatus {
     private Unit unit = new Unit();
     private ArrayList<Building> buildingList = new ArrayList<Building>();
 
+    /**
+     * 取得目前時間
+     * @return 取得目前時間
+     */
+    public int getTime() {
+        return time;
+    }
+
+    /**
+     * 文明等級
+     * @return 文明等級
+     */
+    public int getCivilLevel() {
+        return civilLevel;
+    }
+
+    /**
+     * 目前資源
+     * @return 目前資源
+     */
+    public Resource getResource() {
+        return resource;
+    }
+
+    /**
+     * 取得人、士兵、飛機內容
+     * @return
+     */
+    public Unit getUnit() {
+        return unit;
+    }
+
+    /**
+     * 取得建築物
+     * @return 取得建築物
+     */
+    public ArrayList<Building> getBuildingList() {
+        return buildingList;
+    }
 
     /**
      * 過一個小時
