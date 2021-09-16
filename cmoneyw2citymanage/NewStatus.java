@@ -5,53 +5,81 @@ import java.util.ArrayList;
  */
 public class NewStatus {
     private int time;
-    private int civilLevel = 1;
     private Resource resource = new Resource();
     private Unit unit = new Unit();
+    private Zombie zombie = new Zombie();
     private ArrayList<Building> buildingList = new ArrayList<Building>();
+
+    public NewStatus() {
+        buildingList.add(new House());
+        buildingList.add(new University());
+        buildingList.add(new Barracks());
+        buildingList.add(new LumberCamp());
+        buildingList.add(new MiningCamp());
+        buildingList.add(new Blacksmith());
+        buildingList.add(new GasCamp());
+        buildingList.add(new AirFactory());
+    }
 
     /**
      * 過一個小時
      */
     public void nextHour() {
+        //加一小
+        time++;
         //增加木材
-        resource.addWood(resource.getWoodPeople() * resource.getWoodRate());
+        resource.addWood(resource.getWoodPeople() * (buildingList.get(3)).getRate());
         //增加瓦斯
-        if (buildingList.get(6).isOnOff()) {
-            resource.addGas(resource.getGasRate());
+        if (buildingList.get(6).isOnOff() && buildingList.get(6).getBuildTime() > 0) {
+            resource.addGas(buildingList.get(6).getRate());
         }
         //增加鋼鐵
-        resource.addSteel(resource.getSteelPeople() * resource.getSteelRate());
+        resource.addSteel(resource.getSteelPeople() * buildingList.get(4).getRate());
         //增加市民
-        if (isEnough(new Resource(1, 0, 0)) && buildingList.get(0).isOnOff() &&
-                buildingList.get(0).getBuildCheck() == 1 &&
+        if (isEnough(buildingList.get(0).getEffectResource()) &&
+                buildingList.get(0).isOnOff() &&
+                buildingList.get(0).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(0).getBuildTime()) % 24 == 0) {
             unit.addVillager(unit.getVillagerGenRate());
-            resource.addWood(-1);
+            resource.reduceResource(buildingList.get(0).getEffectResource());
+            buildingList.get(0).setBuildTime(time);
         }
         //增加士兵
-        if (isEnough(new Resource(2, 2, 0)) &&
+        if (isEnough(buildingList.get(2).getEffectResource()) &&
                 buildingList.get(2).isOnOff() &&
-                buildingList.get(2).getBuildCheck() == 1 &&
+                buildingList.get(2).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(2).getBuildTime()) % 3 == 0) {
             unit.addArmy(unit.getArmyGenRate());
-            resource.addWood(-2);
-            resource.addSteel(-2);
+            resource.reduceResource(buildingList.get(2).getEffectResource());
+            buildingList.get(2).setBuildTime(time);
+
         }
         //增加飛機
-        if (isEnough(new Resource(0, 0, 5*buildingList.get())) &&
+        if (isEnough(new Resource(0, 0, 5 * buildingList.get(7).getBuildingLevel())) &&
                 buildingList.get(7).isOnOff() &&
-                buildingList.get(7).getBuildCheck() == 1 &&
+                buildingList.get(7).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(7).getBuildTime()) % 3 == 0) {
             unit.addAircraft(unit.getAircraftGenRate());
-            resource.addGas(-5);
+            resource.reduceResource(buildingList.get(7).getEffectResource());
+            buildingList.get(7).setBuildTime(time);
         }
         //減少建築所需時間
         reduceBuildingNeedTime();
+        //減少建築所需升級時間
+        reduceUpgradeNeedTime();
+
         //判定能不能升級
+    }
 
-
-        time++;
+    /**
+     * 經過指定小時
+     *
+     * @param hr//指定小時
+     */
+    public void nextHours(int hr) {
+        for (int i = 0; i < hr; i++) {
+            nextHour();
+        }
     }
 
     /**
@@ -59,10 +87,10 @@ public class NewStatus {
      */
     public void reduceBuildingNeedTime() {
         for (Building building : buildingList) {
-            if (building.getBuildCheck() == 0) {
+            if (building.getBuildCheck() == Building.BuildCheck.BUILDGOINGON) {
                 building.reduceBuildNeedTime();
                 if (building.getBuildNeedTime() == 0) {
-                    building.setBuildCheck(1);
+                    building.setBuildCheck(Building.BuildCheck.UNBUILDABLE);
                     building.setOnOff(true);
                     building.setBuildTime(time);
                     unit.addVillager(1);
@@ -75,106 +103,97 @@ public class NewStatus {
      * 減少升級所需時間
      */
     public void reduceUpgradeNeedTime() {
-        for (Building building : buildingList) {
-            if (building.getUpgradeCheck() == 0) {
-                building.reduceUpgradeNeedTime();//減少時間
+        for (int i = 0; i < buildingList.size(); i++) {
+            Building building = buildingList.get(i);
+            if (building.getUpgradeCheck() == Building.UpgradeCheck.UPGRADING) {
+                building.reduceUpgradeNeedTime();
                 if (building.getUpgradeNeedTime() == 0) {
-                    building.setUpgradeCheck(-1);//升級後動作
+                    building.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
+                    building.upgrade();
                 }
             }
         }
     }
 
     /**
+     * (主動)分配人力
+     *
+     * @param woodPeople
+     * @param steelPeople
+     * @return
+     */
+    public boolean distribute(int woodPeople, int steelPeople) {
+        villagerReset();
+        boolean isEnoughVillager = false;
+        if (unit.getVillagerCount() >= woodPeople + steelPeople) {
+            resource.addWoodPeople(woodPeople);
+            resource.setSteelPeople(steelPeople);
+            unit.addVillager((woodPeople + steelPeople) * -1);
+            isEnoughVillager = true;
+        }
+        return isEnoughVillager;
+    }
+
+    /**
+     * 召集市民回歸
+     */
+    public void villagerReset() {
+        unit.addVillager(resource.getWoodPeople() + resource.getSteelPeople());
+        resource.setSteelPeople(0);
+        resource.setWoodPeople(0);
+    }
+
+    /**
+     * (主動)選擇建造
      *
      * @param //建築物編號
-     * @return//是否可以建造(變成建造中)
+     * @return//是否可以建造(並變成建造中)
      */
     public boolean build(int opt) {
+        int civilLevel = ((University)(buildingList.get(1))).getCivilLevel();
         boolean isBuildable = false;
-        if (civilLevel >= buildingList.get(opt - 1).getNeedCivilLevel() &&
-                isEnough(buildingList.get(opt - 1).getBuildResource()) &&
-                buildingList.get(opt - 1).getBuildCheck() == -1 &&
-                unit.getVillagerCount() > 0) {
+        if (civilLevel >= buildingList.get(opt - 1).getNeedCivilLevel()
+                && isEnough(buildingList.get(opt - 1).getBuildResource())
+                && buildingList.get(opt - 1).getBuildCheck() == Building.BuildCheck.BUILDABLE
+                && unit.getVillagerCount() > 0) {
             unit.addVillager(-1);
             resource.reduceResource(buildingList.get(opt - 1).getBuildResource());
-            buildingList.get(opt - 1).setBuildCheck(0);
+            buildingList.get(opt - 1).setBuildCheck(Building.BuildCheck.BUILDGOINGON);
             isBuildable = true;
         }
         return isBuildable;
     }
 
+    /**
+     * (主動)選擇升級
+     *
+     * @param //建築物編號
+     * @return //是否可以升級(變成升級中)
+     */
     public boolean upgrade(int opt) {
         boolean isUpgradable = false;
-        if (opt == 2 && civilLevel == 3) {
+        if (opt == 2 && buildingList.get(1).) {
             System.out.println("文明等級已達上限，研究所無法升級");
         } else if (civilLevel >= buildingList.get(opt - 1).getUpNeedCivilLevel()) {
             System.out.println("文明等級不足");
         } else if (civilLevel >= buildingList.get(opt - 1).getUpNeedCivilLevel() &&
                 isEnough(buildingList.get(opt - 1).getUpgradeResource()) &&
-                buildingList.get(opt - 1).getUpgradeCheck() == -1) {
+                buildingList.get(opt - 1).getUpgradeCheck() == Building.UpgradeCheck.UPGRADEABLE) {
             resource.reduceResource(buildingList.get(opt - 1).getUpgradeResource());
-            buildingList.get(opt - 1).setUpgradeCheck(0);
+            buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADING);
             isUpgradable = true;
         }
         return isUpgradable;
     }
 
+    /**
+     * @param r 資源
+     * @return 是否夠資源
+     */
     public boolean isEnough(Resource r) {
         if (resource.getWood() < r.getWood() || resource.getSteel() < r.getSteel() || resource.getGas() < r.getGas()) {
             return false;
         }
         return true;
     }
-
-    public void upgradeBuild(int opt) {
-        switch (opt) {
-            case 1:
-                unit.setVillagerGenRate(unit.getVillagerGenRate() + 2);
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 2:
-                civilLevel++;
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(24);
-                if (civilLevel >= 2) {
-                    buildingList.get(opt - 1).setUpgradeResource(new Resource(60, 30, 10));
-                }
-                break;
-            case 3:
-                unit.setArmyGenRate(unit.getArmyGenRate() + 2);
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 4:
-                resource.setWoodRate(resource.getWoodRate() + 2);
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 5:
-                resource.setSteelRate(resource.getSteelPeople() + 1);
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 6:
-                unit.setArmyLife(unit.getArmyLife() + 3);
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(48);
-                break;
-            case 7:
-                resource.setGasRate(resource.getGasRate() + 1);
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 8:
-                //消耗資源要增加
-                buildingList.get(opt - 1).setUpgradeCheck(-1);
-                buildingList.get(opt - 1).setUpgradeNeedTime(48);
-                break;
-
-
-        }
-    }
-
 }
