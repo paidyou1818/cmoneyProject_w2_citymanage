@@ -1,4 +1,3 @@
-package cmoneyweek1citymanage;
 
 /**
  * 我軍單位
@@ -6,14 +5,14 @@ package cmoneyweek1citymanage;
 public class Unit {
     private int villagerLife = 1;//起始村民數值
     private int villagerCount = 20;//起始村民人數
-    private int villagerGenRate = 0;//起始生產村民速率
+    private int villagerGenRate = 1;//起始生產村民速率
 
     private int armyLife = 2; //起始士兵數值
     private int armyCount = 10; //起始士兵人數
-    private int armyGenRate = 0; //起始生產士兵速率
+    private int armyGenRate = 1; //起始生產士兵速率
 
     private int aircraftLife = 2; //起始飛機數值
-    private int aircraftCount = 0; //起始飛機數值
+    private int aircraftCount = 0; //起始飛機數量
     private int aircraftGenRate = 0; //起始飛機數值
 
     public int getVillagerLife() {
@@ -86,5 +85,17 @@ public class Unit {
 
     public void setAircraftGenRate(int aircraftGenRate) {
         this.aircraftGenRate = aircraftGenRate;
+    }
+
+    public void addVillager(int value) {
+        villagerCount += value;
+    }
+
+    public void addArmy(int value) {
+        armyCount += value;
+    }
+
+    public void addAircraft(int value) {
+        aircraftCount += value;
     }
 }
