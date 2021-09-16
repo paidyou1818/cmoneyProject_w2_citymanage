@@ -12,7 +12,7 @@ public class Barracks extends Building{
     private int armyGenRate; //生產士兵速率
 
 
-            
+
     public Barracks(){
         //建築編號
         setNumber(3);
@@ -50,12 +50,11 @@ public class Barracks extends Building{
         setEffectResource(new Resource(2,2,0));
         //升級需要文明等級
         setUpNeedCivilLevel(2);
-        
+
     }
 
     public int getArmyGenRate() {
         armyGenRate = getBuildingLevel()*2-1;
         return armyGenRate;
-    }    
-
+    }
 }

@@ -55,7 +55,7 @@ public class House extends Building{
         setEffectResource(new Resource(1,0,0));
         //升級需要文明等級
         setUpNeedCivilLevel(2);
-        
+
         this.villagerLife = 1;
     }
 
@@ -63,7 +63,5 @@ public class House extends Building{
         villagerGenRate = this.getBuildingLevel()*2-1;
         return villagerGenRate;
     }
-    
-    
 
 }

@@ -189,14 +189,6 @@ public class Building {
         this.onOff = onOff;
     }
     
-    public Resource getEffectResource() {
-        return effectResource;
-    }
-
-    public void setEffectResource(Resource effectResource) {
-        this.effectResource = effectResource;
-    }
-    
     //升級重置
     public void upgradeReset(){
         setUpgradeNeedTime(upgradeResetTime);
@@ -208,6 +200,23 @@ public class Building {
         setLife(initialLife);
     }
 
+    public Resource getEffectResource() {
+        return effectResource;
+    }
+
+    public void setEffectResource(Resource effectResource) {
+        this.effectResource = effectResource;
+    }
+
+    public int getRate() {
+        return 0;
+    }
+
+    public void upgrade() {
+        buildingLevel++;
+        setUpgradeNeedTime(upgradeResetTime);
+        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
+    }
 }
 
     

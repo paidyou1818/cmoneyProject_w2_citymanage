@@ -51,7 +51,7 @@ public class LumberCamp extends Building{
     }
 
     public int getWoodRate() {
-        
+
         woodRate = this.getBuildingLevel()+1;
         if(this.getBuildCheck().equals(Building.BuildCheck.UNBUILDABLE)){
             woodRate ++;

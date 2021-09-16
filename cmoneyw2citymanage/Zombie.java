@@ -166,5 +166,4 @@ public class Zombie {
         }
         System.out.println();
     }
-
 }

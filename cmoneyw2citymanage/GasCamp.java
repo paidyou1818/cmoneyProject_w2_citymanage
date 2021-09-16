@@ -48,12 +48,11 @@ public class GasCamp extends Building{
         //升級需要文明等級
         this.setUpNeedCivilLevel(3);
     }
-    
+
     public int getGasRate() {
-        
+
         gasRate = this.getBuildingLevel()+4;
 
         return gasRate;
     }
-
 }

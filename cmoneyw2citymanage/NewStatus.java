@@ -40,7 +40,7 @@ public class NewStatus {
                 buildingList.get(0).isOnOff() &&
                 buildingList.get(0).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(0).getBuildTime()) % 24 == 0) {
-            unit.addVillager(unit.getVillagerGenRate());
+            unit.addVillager(((House) buildingList.get(0)).getVillagerGenRate());
             resource.reduceResource(buildingList.get(0).getEffectResource());
             buildingList.get(0).setBuildTime(time);
         }
@@ -49,7 +49,7 @@ public class NewStatus {
                 buildingList.get(2).isOnOff() &&
                 buildingList.get(2).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(2).getBuildTime()) % 3 == 0) {
-            unit.addArmy(unit.getArmyGenRate());
+            unit.addArmy(((Barracks) buildingList.get(2)).getArmyGenRate());
             resource.reduceResource(buildingList.get(2).getEffectResource());
             buildingList.get(2).setBuildTime(time);
 
@@ -59,7 +59,7 @@ public class NewStatus {
                 buildingList.get(7).isOnOff() &&
                 buildingList.get(7).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(7).getBuildTime()) % 3 == 0) {
-            unit.addAircraft(unit.getAircraftGenRate());
+            unit.addAircraft(((AirFactory) buildingList.get(7)).getAircraftGenRate());
             resource.reduceResource(buildingList.get(7).getEffectResource());
             buildingList.get(7).setBuildTime(time);
         }
@@ -150,7 +150,7 @@ public class NewStatus {
      * @return//是否可以建造(並變成建造中)
      */
     public boolean build(int opt) {
-        int civilLevel = ((University)(buildingList.get(1))).getCivilLevel();
+        int civilLevel = ((University) buildingList.get(1)).;
         boolean isBuildable = false;
         if (civilLevel >= buildingList.get(opt - 1).getNeedCivilLevel()
                 && isEnough(buildingList.get(opt - 1).getBuildResource())

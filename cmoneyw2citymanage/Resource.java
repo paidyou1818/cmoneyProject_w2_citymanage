@@ -18,7 +18,6 @@ public class Resource {
         this.steel = steel;
         this.wood = wood;
     }
-
     public Resource() {
 
     }
@@ -121,5 +120,9 @@ public class Resource {
         wood -= resource.wood;
         steel -= resource.steel;
         gas -= resource.gas;
+    }
+
+    public String toString() {
+        return "木材:" + wood + " 鋼鐵:" + steel + " 瓦斯:" + gas;
     }
 }

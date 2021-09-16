@@ -11,10 +11,10 @@
 public class Blacksmith extends Building{
     private int armyLife; //士兵生命值
     private int armyLevel;//士兵等級
-    
+
     private int aircraftLife;//飛機生命值
     private int aircraftLevel;//飛機等級
-    
+
     public Blacksmith(){
 
         //建築編號
@@ -47,8 +47,8 @@ public class Blacksmith extends Building{
         this.setOnOff(false);
         //升級需要文明等級
         this.setUpNeedCivilLevel(2);
-        
-        
+
+
         //起始士兵等級是1
         armyLevel = 1;
         //起始飛機等級是1
@@ -56,13 +56,13 @@ public class Blacksmith extends Building{
 
 
     }
-    
+
     //升級士兵>>士兵等級+1
     //士兵生命值改動    
     public void upgradeArmy() {
         this.armyLevel ++;
     }
-    
+
     public int getArmyLevel() {
         return armyLevel;
     }
@@ -80,11 +80,10 @@ public class Blacksmith extends Building{
     public int getAircraftLevel() {
         return aircraftLevel;
     }
-    
+
     public int getAircraftLife() {
         //飛機生命值=飛機等級*2
         aircraftLife = this.getAircraftLevel()*2;
         return aircraftLife;
     }
-    
 }
