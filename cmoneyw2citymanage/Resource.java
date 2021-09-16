@@ -23,12 +23,6 @@ public class Resource {
 
     }
 
-
-    public Resource(int wood, int steel, int gas) {
-        this.wood = wood;
-        this.steel = steel;
-        this.gas = gas;
-    }
     
     public int getWood() {
         return wood;

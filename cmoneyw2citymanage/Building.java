@@ -30,7 +30,7 @@ public class Building {
         this.buildCheck = buildCheck;
         this.buildNeedTime = buildNeedTime;
         this.buildTime = buildTime;
-        this.upNeedCivilLevel = upNeedCivilLevel
+        this.needCivilLevel = needCivilLevel;
         this.upgradeResource = upgradeResource;
         this.upgradeCheck = upgradeCheck;
         this.upgradeNeedTime = upgradeNeedTime;
