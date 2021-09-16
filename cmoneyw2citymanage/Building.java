@@ -5,7 +5,9 @@ public class Building {
     private int buildingLevel;
     private int life;
     private Resource buildResource;
-    private int buildCheck;
+    private BuildCheck buildCheck;
+
+    private Resource effectResource;
     private int buildNeedTime;
     private int buildTime;
     private int needCivilLevel;
@@ -13,26 +15,43 @@ public class Building {
     private int upNeedCivilLevel;
 
     private Resource upgradeResource;
-    private int upgradeCheck;
+    private UpgradeCheck upgradeCheck;
     private int upgradeNeedTime;
-
     private boolean onOff;
   
 
 
 
-    public Building(int number, String name, int buildingLevel, int life, Resource buildResource, int buildCheck, int buildNeedTime, int buildTime, int needCivilLevel, Resource upgradeResource, int upgradeCheck, int upgradeNeedTime, boolean onOff, int upNeedCivilLevel) {
+    /**
+     * 可否升級檢查
+     */
+    public enum UpgradeCheck {
+        UPGRADEABLE,
+        UPGRADING,
+        NOTUPGRADEABLE;
+    }
+
+    /**
+     * 可否建造檢查
+     */
+    public enum BuildCheck {
+        BUILDABLE,
+        BUILDGOINGON,
+        UNBUILDABLE;
+    }
+
+    public Building(int number, String name, int buildingLevel, int life, Resource buildResource, int buildNeedTime, int buildTime, int needCivilLevel, Resource upgradeResource, int upgradeNeedTime, boolean onOff, int upNeedCivilLevel) {
         this.number = number;
         this.name = name;
         this.buildingLevel = buildingLevel;
         this.life = life;
         this.buildResource = buildResource;
-        this.buildCheck = buildCheck;
+        this.buildCheck = BuildCheck.BUILDABLE;
         this.buildNeedTime = buildNeedTime;
         this.buildTime = buildTime;
         this.needCivilLevel = needCivilLevel;
         this.upgradeResource = upgradeResource;
-        this.upgradeCheck = upgradeCheck;
+        this.upgradeCheck = UpgradeCheck.UPGRADEABLE;
         this.upgradeNeedTime = upgradeNeedTime;
         this.onOff = onOff;
         this.upNeedCivilLevel = upNeedCivilLevel;
@@ -90,14 +109,6 @@ public class Building {
         this.buildResource = buildResource;
     }
 
-    public int getBuildCheck() {
-        return buildCheck;
-    }
-
-    public void setBuildCheck(int buildCheck) {
-        this.buildCheck = buildCheck;
-    }
-
     public int getBuildNeedTime() {
         return buildNeedTime;
     }
@@ -130,14 +141,6 @@ public class Building {
         this.upgradeResource = upgradeResource;
     }
 
-    public int getUpgradeCheck() {
-        return upgradeCheck;
-    }
-
-    public void setUpgradeCheck(int upgradeCheck) {
-        this.upgradeCheck = upgradeCheck;
-    }
-
     public int getUpgradeNeedTime() {
         return upgradeNeedTime;
     }
@@ -152,6 +155,30 @@ public class Building {
 
     public void setOnOff(boolean onOff) {
         this.onOff = onOff;
+    }
+
+    public Resource getEffectResource() {
+        return effectResource;
+    }
+
+    public void setEffectResource(Resource effectResource) {
+        this.effectResource = effectResource;
+    }
+
+    public BuildCheck getBuildCheck() {
+        return buildCheck;
+    }
+
+    public void setBuildCheck(BuildCheck buildCheck) {
+        this.buildCheck = buildCheck;
+    }
+
+    public UpgradeCheck getUpgradeCheck() {
+        return upgradeCheck;
+    }
+
+    public void setUpgradeCheck(UpgradeCheck upgradeCheck) {
+        this.upgradeCheck = upgradeCheck;
     }
 
     public int getUpNeedCivilLevel() {
