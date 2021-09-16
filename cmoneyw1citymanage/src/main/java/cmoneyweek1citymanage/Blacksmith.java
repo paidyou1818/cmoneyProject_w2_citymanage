@@ -1,4 +1,5 @@
-package cmoneyweek1citymanage;/*
+package cmoneyweek1citymanage;
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -11,10 +12,10 @@ package cmoneyweek1citymanage;/*
 public class Blacksmith extends Building{
     private int armyLife; //士兵生命值
     private int armyLevel;//士兵等級
-    
+
     private int aircraftLife;//飛機生命值
     private int aircraftLevel;//飛機等級
-    
+
     public Blacksmith(){
 
         //建築編號
@@ -23,14 +24,18 @@ public class Blacksmith extends Building{
         this.setName("兵工廠");
         //建築等級
         this.setBuildingLevel(1);
-        //建築生命值
-        this.setLife(30);
+        //建築滿血生命值
+        setLifeFull(30);
+        //建築當前生命值
+        setLife(getLifeFull());
         //建造所需資源
         this.setBuildResource(new Resource(30,10,0));
         //建築狀態
         this.setBuildCheck(Building.BuildCheck.BUILDABLE);
         //建造所需時間
-        this.setBuildNeedTime(3);
+        setInitialBuildTime(3);
+        //建築剩餘時間
+        setBuildNeedTime(getInitialBuildTime());
         //建築建好時間
         this.setBuildTime(-1);
         //建造需要文明等級
@@ -43,8 +48,8 @@ public class Blacksmith extends Building{
         this.setOnOff(false);
         //升級需要文明等級
         this.setUpNeedCivilLevel(2);
-        
-        
+
+
         //起始士兵等級是1
         armyLevel = 1;
         //起始飛機等級是1
@@ -52,13 +57,13 @@ public class Blacksmith extends Building{
 
 
     }
-    
+
     //升級士兵>>士兵等級+1
     //士兵生命值改動    
     public void upgradeArmy() {
         this.armyLevel ++;
     }
-    
+
     public int getArmyLevel() {
         return armyLevel;
     }
@@ -76,7 +81,7 @@ public class Blacksmith extends Building{
     public int getAircraftLevel() {
         return aircraftLevel;
     }
-    
+
     public int getAircraftLife() {
         //飛機生命值=飛機等級*2
         aircraftLife = this.getAircraftLevel()*2;

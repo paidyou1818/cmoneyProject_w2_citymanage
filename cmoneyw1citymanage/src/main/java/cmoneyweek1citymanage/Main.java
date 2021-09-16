@@ -107,7 +107,7 @@ public class Main {
                 // 判定是否可以升級
                 if (newStatus.upgrade(opt)) {
                     System.out.println("開始升級" + newStatus.getBuildingList().get(opt - 1).getName() +
-                            " 預計" + newStatus.getBuildingList().get(opt - 1).getUpgradeNeedTime() + "小時後完成");
+                                        " 預計" + newStatus.getBuildingList().get(opt - 1).getUpgradeNeedTime() + "小時後完成");
                 } else {
                     System.out.println("無法建造" + newStatus.getBuildingList().get(opt - 1).getName() + "!");
                 }

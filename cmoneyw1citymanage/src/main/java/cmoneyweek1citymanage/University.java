@@ -1,13 +1,5 @@
-package cmoneyweek1citymanage;/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package cmoneyweek1citymanage;
 
-/**
- *
- * @author kisso
- */
 public class University extends Building{
     public University(){
 
@@ -17,14 +9,18 @@ public class University extends Building{
         this.setName("研究所");
         //建築等級
         this.setBuildingLevel(1);
-        //建築生命值
-        this.setLife(30);
+        //建築滿血生命值
+        setLifeFull(30);
+        //建築當前生命值
+        setLife(getLifeFull());
         //建造所需資源
         this.setBuildResource(new Resource(10,5,0));
         //建築狀態
         this.setBuildCheck(Building.BuildCheck.BUILDABLE);
         //建造所需時間
-        this.setBuildNeedTime(3);
+        setInitialBuildTime(3);
+        //建築剩餘時間
+        setBuildNeedTime(getInitialBuildTime());
         //建築建好時間
         this.setBuildTime(-1);
         //建造需要文明等級
@@ -33,10 +29,10 @@ public class University extends Building{
         this.setUpgradeResource(new Resource(50,20,0));
         //升級狀態
         this.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-        //升級剩餘時間
-        this.setUpgradeNeedTime(24);
         //升級所需時間
         this.setUpgradeResetTime(24);
+        //升級剩餘時間
+        this.setUpgradeNeedTime(getUpgradeResetTime());
         //建築物功能開關
         this.setOnOff(false);
         //升級需要文明等級
