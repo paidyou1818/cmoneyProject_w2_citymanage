@@ -1,9 +1,9 @@
+
 public class Building {
     private int number;
     private String name;
     private int buildingLevel;
     private int life;
-
     private Resource buildResource;
     private BuildCheck buildCheck;
 
@@ -11,12 +11,15 @@ public class Building {
     private int buildNeedTime;
     private int buildTime;
     private int needCivilLevel;
+
     private int upNeedCivilLevel;
 
     private Resource upgradeResource;
     private UpgradeCheck upgradeCheck;
     private int upgradeNeedTime;
     private boolean onOff;
+  
+
 
 
     /**
@@ -46,7 +49,7 @@ public class Building {
         this.buildCheck = BuildCheck.BUILDABLE;
         this.buildNeedTime = buildNeedTime;
         this.buildTime = buildTime;
-        this.needCivilLevel = needCivilLevel;
+        this.upNeedCivilLevel = upNeedCivilLevel
         this.upgradeResource = upgradeResource;
         this.upgradeCheck = UpgradeCheck.UPGRADEABLE;
         this.upgradeNeedTime = upgradeNeedTime;
@@ -186,3 +189,12 @@ public class Building {
         this.upNeedCivilLevel = upNeedCivilLevel;
     }
 }
+
+    
+    
+
+    
+    
+  
+    
+    
