@@ -42,6 +42,27 @@ public class University extends Building{
         //升級需要文明等級
         this.setUpNeedCivilLevel(1);
     }
-    
 
+    /**
+     * 印出建造資訊
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(建造成本:木材" + getBuildResource().getWood() +
+                            " 鋼鐵" + getBuildResource().getSteel() +
+                            " 所需文明等級: " + getNeedCivilLevel() +
+                            " )\t功能：可以進行科技研究，提升文明等級");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                            " 鋼鐵" + getUpgradeResource().getSteel() +
+                            " 所需文明等級: " + getUpNeedCivilLevel() +
+                            " )\t升級功能:文明等級上升1級");
+    }
 }

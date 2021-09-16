@@ -56,7 +56,30 @@ public class House extends Building{
         villagerGenRate = this.getBuildingLevel()*2-1;
         return villagerGenRate;
     }
-    
-    
+
+    /**
+     * 印出建造資訊
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(建造成本:木材" + getBuildResource().getWood() +
+                            " 鋼鐵" + getBuildResource().getSteel() +
+                            " 所需文明等級: " + getNeedCivilLevel() +
+                            " )\t功能：每24小時消耗" + getEffectResource().getWood() + "木材" +
+                            "，產生" + this.getBuildingLevel() + "個市民");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                            " 鋼鐵" + getUpgradeResource().getSteel() +
+                            " 所需文明等級: " + getUpNeedCivilLevel() +
+                            " )\t升級功能:每24小時消耗" + getEffectResource().getWood() + "木材" +
+                            "，產生" + (this.getBuildingLevel() + 1) + "個市民");
+    }
 
 }

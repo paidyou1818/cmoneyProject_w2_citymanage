@@ -45,7 +45,7 @@ public class Main {
 
         // 顯示狀態
         Status status = new Status();
-        status.showStatus();
+        status.showStatus(newStatus);
 
         // 顯示操作手冊
         status.showManual();
@@ -70,22 +70,22 @@ public class Main {
                 status.showStatus(newStatus);//秀出資訊
             }
 
-            // 採集分配指令
-            if (order.equals("dist")) {
-                //System.out.println("請輸入2個參數分配採集木頭與鋼鐵人數 如\n2 4");
-                resource.distribution(Integer.parseInt(orderArray[1]), Integer.parseInt(orderArray[2]));
-                if (villagers.villagerNumber >= resource.woodPeople + resource.steelPeople + Integer.parseInt(building.toString())){
-                    System.out.println(resource.getDistribution());
-                } else {
-                    System.out.println("人數不足，採集人數歸0，請重新分配採集人數(建築無法取消)");
-                    resource.distribution(0, 0);
-                }
-            }
+//            // 採集分配指令
+//            if (order.equals("dist")) {
+//                //System.out.println("請輸入2個參數分配採集木頭與鋼鐵人數 如\n2 4");
+//                resource.distribution(Integer.parseInt(orderArray[1]), Integer.parseInt(orderArray[2]));
+//                if (villagers.villagerNumber >= resource.woodPeople + resource.steelPeople + Integer.parseInt(building.toString())){
+//                    System.out.println(resource.getDistribution());
+//                } else {
+//                    System.out.println("人數不足，採集人數歸0，請重新分配採集人數(建築無法取消)");
+//                    resource.distribution(0, 0);
+//                }
+//            }
 
 
             // 建造指令
             if (order.equals("build")) {
-                status.showBuilding();
+                status.showBuilding(newStatus);
                 System.out.print("請選擇要建造的建築物:");
                 // 輸入建築物編號
                 int opt = sc.nextInt();
@@ -100,7 +100,7 @@ public class Main {
 
             // 升級指令
             if (order.equals("upgrade")) {
-                status.showBuilding();
+                status.showUpgrade(newStatus);
                 System.out.print("請選擇要升級的建築物:");
                 // 輸入建築物編號
                 int opt = sc.nextInt();

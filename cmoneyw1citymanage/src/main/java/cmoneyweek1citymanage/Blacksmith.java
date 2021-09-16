@@ -82,5 +82,27 @@ public class Blacksmith extends Building{
         aircraftLife = this.getAircraftLevel()*2;
         return aircraftLife;
     }
-    
+
+    /**
+     * 印出建造資訊
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(建造成本:木材" + getBuildResource().getWood() +
+                            " 鋼鐵" + getBuildResource().getSteel() +
+                            " 所需文明等級: " + getNeedCivilLevel() +
+                            " )\t功能：可以升級士兵及飛機");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                            " 鋼鐵" + getUpgradeResource().getSteel() +
+                            " 所需文明等級: " + getUpNeedCivilLevel() +
+                            " )\t升級功能:可以選擇升級士兵科技或飛機科技");
+    }
 }

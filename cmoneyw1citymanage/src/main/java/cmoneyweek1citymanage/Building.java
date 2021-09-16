@@ -50,7 +50,6 @@ public class Building {
         upgradeNeedTime--;
     }
 
-
     public int getNumber() {
         return number;
     }
@@ -180,6 +179,15 @@ public class Building {
         setUpgradeNeedTime(upgradeResetTime);
     }
 
+    //印出建造資訊
+    public void printBuild() {
+
+    }
+
+    //印出升級資訊
+    public void printUpgrade() {
+
+    }
 }
 
     

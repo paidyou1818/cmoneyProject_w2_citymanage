@@ -45,11 +45,33 @@ public class GasCamp extends Building{
         this.setUpNeedCivilLevel(3);
     }
     
-    public int getGasRate() {
+    public int getRate() {
         
         gasRate = this.getBuildingLevel()+4;
 
         return gasRate;
     }
 
+    /**
+     * 印出建造資訊
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(建造成本:木材" + getBuildResource().getWood() +
+                            " 鋼鐵" + getBuildResource().getSteel() +
+                            " 所需文明等級: " + getNeedCivilLevel() +
+                            " )\t功能：每小時生產" + getRate() + "單位瓦斯");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                            " 鋼鐵" + getUpgradeResource().getSteel() +
+                            " 所需文明等級: " + getUpNeedCivilLevel() +
+                            " )\t升級功能:生產瓦斯效率增加 >> 每小時生產瓦斯效率增為" + (getRate() + 1) +"單位瓦斯");
+    }
 }

@@ -47,7 +47,7 @@ public class MiningCamp extends Building{
         
     }
 
-    public int getSteelRate() {
+    public int getRate() {
         
         steelRate = this.getBuildingLevel()+1;
         if(this.getBuildCheck().equals(Building.BuildCheck.UNBUILDABLE)){
@@ -56,7 +56,28 @@ public class MiningCamp extends Building{
         return steelRate;
     }
 
-    
+    /**
+     * 印出建造資訊
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(建造成本:木材" + getBuildResource().getWood() +
+                            " 鋼鐵" + getBuildResource().getSteel() +
+                            " 所需文明等級: " + getNeedCivilLevel() +
+                            " )\t功能：採集鋼鐵效率增加 >> 市民每小時鋼鐵採集效率增為2單位鋼鐵");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                            " 鋼鐵" + getUpgradeResource().getSteel() +
+                            " 所需文明等級: " + getUpNeedCivilLevel() +
+                            " )\t升級功能:採集鋼鐵效率增加 >> 市民每小時鋼鐵採集效率增為" + (getRate() + 1) +"單位鋼鐵");
+    }
     
     
 

@@ -46,7 +46,7 @@ public class LumberCamp extends Building{
         this.setUpNeedCivilLevel(2);
     }
 
-    public int getWoodRate() {
+    public int getRate() {
         
         woodRate = this.getBuildingLevel()+1;
         if(this.getBuildCheck().equals(Building.BuildCheck.UNBUILDABLE)){
@@ -55,4 +55,28 @@ public class LumberCamp extends Building{
         return woodRate;
     }
 
+
+
+    /**
+     * 印出建造資訊
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                            "　:(建造成本:木材" + getBuildResource().getWood() +
+                            " 鋼鐵" + getBuildResource().getSteel() +
+                            " 所需文明等級: " + getNeedCivilLevel() +
+                            " )\t功能：採集木材效率增加 >> 市民每小時木材採集效率增為4單位木材");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                " 鋼鐵" + getUpgradeResource().getSteel() +
+                " 所需文明等級: " + getUpNeedCivilLevel() +
+                " )\t升級功能:採集木材效率增加 >> 市民每小時木材採集效率增為" + (getRate() + 2) +"單位木材");
+    }
 }
