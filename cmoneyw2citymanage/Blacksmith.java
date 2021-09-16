@@ -23,14 +23,18 @@ public class Blacksmith extends Building{
         this.setName("兵工廠");
         //建築等級
         this.setBuildingLevel(1);
-        //建築生命值
-        this.setLife(30);
+        //建築滿血生命值
+        setLifeFull(30);
+        //建築當前生命值
+        setLife(getLifeFull());
         //建造所需資源
         this.setBuildResource(new Resource(30,10,0));
         //建築狀態
         this.setBuildCheck(Building.BuildCheck.BUILDABLE);
         //建造所需時間
-        this.setBuildNeedTime(3);
+        setInitialBuildTime(3);
+        //建築剩餘時間
+        setBuildNeedTime(getInitialBuildTime());
         //建築建好時間
         this.setBuildTime(-1);
         //建造需要文明等級

@@ -5,10 +5,13 @@ public class Building {
     private String name;
     private int buildingLevel;
     private int life;
+    private int lifeFull;
+    private int initialLife;
     private Resource buildResource;
     private BuildCheck buildCheck;//enum
     private int buildNeedTime;
     private int buildTime;
+    private int initialBuildTime;
     private int needCivilLevel;
 
     private int upNeedCivilLevel;
@@ -82,6 +85,14 @@ public class Building {
         this.life = life;
     }
 
+    public int getLifeFull() {
+        return lifeFull;
+    }
+
+    public void setLifeFull(int lifeFull) {
+        this.lifeFull = lifeFull;
+    }
+
     public Resource getBuildResource() {
         return buildResource;
     }
@@ -96,6 +107,14 @@ public class Building {
 
     public void setBuildCheck(BuildCheck buildCheck) {
         this.buildCheck = buildCheck;
+    }
+
+    public int getInitialBuildTime() {
+        return initialBuildTime;
+    }
+
+    public void setInitialBuildTime(int initialBuildTime) {
+        this.initialBuildTime = initialBuildTime;
     }
 
     public int getBuildNeedTime() {
@@ -153,6 +172,10 @@ public class Building {
     public void setUpgradeNeedTime(int upgradeNeedTime) {
         this.upgradeNeedTime = upgradeNeedTime;
     }
+
+    public int getUpgradeResetTime() {
+        return upgradeResetTime;
+    }
     
     public void setUpgradeResetTime(int upgradeResetTime){
         this.upgradeResetTime = upgradeResetTime;
@@ -177,6 +200,12 @@ public class Building {
     //升級重置
     public void upgradeReset(){
         setUpgradeNeedTime(upgradeResetTime);
+    }
+    public void buildReset(){
+        setBuildNeedTime(initialBuildTime);
+    }
+    public void initialLife(){
+        setLife(initialLife);
     }
 
 }
