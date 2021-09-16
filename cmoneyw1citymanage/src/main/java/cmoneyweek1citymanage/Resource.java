@@ -1,3 +1,4 @@
+package cmoneyweek1citymanage;
 
 /**
  * 建造一個起始資源類別

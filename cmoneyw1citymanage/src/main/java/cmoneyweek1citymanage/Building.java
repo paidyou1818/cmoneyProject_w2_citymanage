@@ -1,3 +1,4 @@
+package cmoneyweek1citymanage;
 
 public class Building {
     

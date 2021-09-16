@@ -1,14 +1,9 @@
-
+package cmoneyweek1citymanage;
 
 public class Unit {
 
     private int villagerLife = 1;//村民數值
     private int villagerCount = 20;//村民人數
-
-
-    private int villagerLife = 1;//村民數值
-    private int villagerCount = 20;//村民人數
-
     private int villagerGenRate = 1;//起始生產村民速率
 
     private int armyLife = 2; //士兵數值
