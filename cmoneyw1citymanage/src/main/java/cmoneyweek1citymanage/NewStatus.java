@@ -207,7 +207,6 @@ public class NewStatus {
         }
         return isUpgradable;
     }
-
     /**
      * @param r 資源
      * @return 是否夠資源
