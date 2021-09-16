@@ -1,19 +1,28 @@
 
-
+/**
+ * 建造一個起始資源類別
+ */
 public class Resource {
-    public int wood;
-    public int steel;
-    public int gas;
-    public int woodPeople;
-    public int steelPeople;
-    public int gasPeople;
-    public int woodRate = 3;
-    public int steelRate = 1;
-    public int gasRate = 0;
-    
-    public Resource(){
-        
+    private int wood; //木材量
+    private int steel; //鋼鐵量
+    private int gas; //瓦斯量
+    private int woodPeople = 0;//採集木材人數
+    private int steelPeople = 0;//採集鋼鐵人數
+
+    private int woodRate = 3;//採集木材效率
+    private int steelRate = 1;//採集鋼鐵效率
+    private int gasRate = 5;//採集瓦斯效率
+
+    public Resource(int wood, int steel, int gas) {
+        this.gas = gas;
+        this.steel = steel;
+        this.wood = wood;
     }
+
+    public Resource() {
+
+    }
+
 
     public Resource(int wood, int steel, int gas) {
         this.wood = wood;
@@ -61,14 +70,6 @@ public class Resource {
         this.steelPeople = steelPeople;
     }
 
-    public int getGasPeople() {
-        return gasPeople;
-    }
-
-    public void setGasPeople(int gasPeople) {
-        this.gasPeople = gasPeople;
-    }
-
     public int getWoodRate() {
         return woodRate;
     }
@@ -93,15 +94,38 @@ public class Resource {
         this.gasRate = gasRate;
     }
 
-    public void addGas() {
-        gas += gasRate;
+    public void addGas(int value) {
+        gas += value;
     }
 
-    public void addWood() {
-        wood += woodRate;
+    public void addWood(int value) {
+        wood += value;
+        if (wood == 0) {
+            System.out.println("已無木材");
+        }
     }
 
-    public void addSteel() {
-        steel += steelRate;
+    public void addSteel(int value) {
+        steel += value;
+    }
+
+    public void addWoodPeople(int value) {
+        woodPeople += value;
+    }
+
+    public void addSteelPeople(int value) {
+        steelPeople += value;
+    }
+
+    public void addResource(Resource resource) {
+        wood += resource.wood;
+        steel += resource.steel;
+        gas += resource.gas;
+    }
+
+    public void reduceResource(Resource resource) {
+        wood -= resource.wood;
+        steel -= resource.steel;
+        gas -= resource.gas;
     }
 }
