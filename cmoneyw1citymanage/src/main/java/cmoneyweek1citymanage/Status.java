@@ -11,10 +11,10 @@ public class Status {
         System.out.println("nexthours(hr) : 時間進行 hr 小時");
     }
 
-    public void showBuilding(NewStatus newStatus) {
+    public void showBuilding() {
         System.out.println("《建築物編號和功能介紹》");
-        for (int i = 0; i < newStatus.getBuildingList().size(); i++) {
-            newStatus.getBuildingList().get(i).printBuild();
+        for (int i = 0; i < getBuildingList().size(); i++) {
+            getBuildingList().get(i).printBuild();
         }
 //        System.out.println("1.房屋　:(建造成本:木材" +  "鋼鐵0) \t功能：每24小時產生市民+1\t" + "(升級成本:木材50 鋼鐵20)\t每24小時產生市民+2");
 //        System.out.println("2.研究所:(建造成本:木材10 鋼鐵5) \t功能：可升級建築等級\t\t" + "(升級成本:木材30 鋼鐵15)\t文明等級+1");
@@ -42,7 +42,7 @@ public class Status {
     public void showStatus(NewStatus newStatus) {
         System.out.println("\n《目前城市狀態》");
         System.out.println("時間: 第" + newStatus.getTime() + "小時" +
-                           "\t文明等級: " + newStatus.getCivilLevel());
+                           "\t文明等級: " + ((University)buildingList.get(1)).getCivilLevel());
         System.out.println("總市民數: " + newStatus.getUnit().getVillagerCount() +
                             "\t總士兵數: " + newStatus.getUnit().getArmyCount() +
                             "\t總飛機數: " + newStatus.getUnit().getAircraftCount());
@@ -53,6 +53,7 @@ public class Status {
                             "\t採集鋼鐵人數: " + newStatus.getResource().getSteelPeople() + "人" +
                             "\t採集鋼鐵效率: 每小時採集" + newStatus.getResource().getSteelRate() + " 鋼鐵");
         System.out.println("現有瓦斯: " + newStatus.getResource().getGas() +
+                            "\t市民無法採集瓦斯，請建造瓦斯廠來生產瓦斯" +
                             "\t生產瓦斯效率: 每小時生產" + newStatus.getResource().getGasRate() + " 瓦斯");
         System.out.println();
 //        System.out.println("建築狀態  0>>可建造 1>>建造中 2>>不可建造\t\t建築人數:" + building + "人");

@@ -1,9 +1,5 @@
 package cmoneyweek1citymanage;
 
-/**
- *
- * @author kisso
- */
 public class LumberCamp extends Building{
     private final int upgradeResetTime = 30;
     private int woodRate ;
@@ -46,6 +42,7 @@ public class LumberCamp extends Building{
         this.setUpNeedCivilLevel(2);
     }
 
+    @Override
     public int getRate() {
 
         woodRate = this.getBuildingLevel()+1;

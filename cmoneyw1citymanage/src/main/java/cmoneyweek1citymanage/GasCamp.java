@@ -41,6 +41,7 @@ public class GasCamp extends Building{
         this.setUpNeedCivilLevel(3);
     }
 
+    @Override
     public int getRate() {
 
         gasRate = this.getBuildingLevel()+4;

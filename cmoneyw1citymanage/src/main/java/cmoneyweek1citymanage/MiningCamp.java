@@ -1,9 +1,5 @@
 package cmoneyweek1citymanage;
 
-/**
- *
- * @author kisso
- */
 public class MiningCamp extends Building{
     private final int upgradeResetTime = 30;
     private int steelRate ;
@@ -47,6 +43,7 @@ public class MiningCamp extends Building{
 
     }
 
+    @Override
     public int getRate() {
 
         steelRate = this.getBuildingLevel()+1;

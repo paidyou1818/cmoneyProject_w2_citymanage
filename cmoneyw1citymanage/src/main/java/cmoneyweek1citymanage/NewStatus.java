@@ -7,47 +7,38 @@ import java.util.ArrayList;
  */
 public class NewStatus {
     private int time;
-    private int civilLevel = 1;
     private Resource resource = new Resource();
     private Unit unit = new Unit();
+    private Zombie zombie = new Zombie();
     private ArrayList<Building> buildingList = new ArrayList<Building>();
 
-    /**
-     * 取得目前時間
-     * @return 取得目前時間
-     */
+    public NewStatus() {
+        buildingList.add(new House());
+        buildingList.add(new University());
+        buildingList.add(new Barracks());
+        buildingList.add(new LumberCamp());
+        buildingList.add(new MiningCamp());
+        buildingList.add(new Blacksmith());
+        buildingList.add(new GasCamp());
+        buildingList.add(new AirFactory());
+    }
+
     public int getTime() {
         return time;
     }
 
-    /**
-     * 文明等級
-     * @return 文明等級
-     */
-    public int getCivilLevel() {
-        return civilLevel;
-    }
-
-    /**
-     * 目前資源
-     * @return 目前資源
-     */
     public Resource getResource() {
         return resource;
     }
 
-    /**
-     * 取得人、士兵、飛機內容
-     * @return
-     */
     public Unit getUnit() {
         return unit;
     }
 
-    /**
-     * 取得建築物
-     * @return 取得建築物
-     */
+    public Zombie getZombie() {
+        return zombie;
+    }
+
     public ArrayList<Building> getBuildingList() {
         return buildingList;
     }
@@ -59,36 +50,40 @@ public class NewStatus {
         //加一小
         time++;
         //增加木材
-        resource.addWood(resource.getWoodPeople() * resource.getWoodRate());
+        resource.addWood(resource.getWoodPeople() * (buildingList.get(3)).getRate());
         //增加瓦斯
-        if (buildingList.get(6).isOnOff()) {
-            resource.addGas(resource.getGasRate());
+        if (buildingList.get(6).isOnOff() && buildingList.get(6).getBuildTime() > 0) {
+            resource.addGas(buildingList.get(6).getRate());
         }
         //增加鋼鐵
-        resource.addSteel(resource.getSteelPeople() * resource.getSteelRate());
+        resource.addSteel(resource.getSteelPeople() * buildingList.get(4).getRate());
         //增加市民
-        if (isEnough(new Resource(1, 0, 0)) && buildingList.get(0).isOnOff() &&
+        if (isEnough(buildingList.get(0).getEffectResource()) &&
+                buildingList.get(0).isOnOff() &&
                 buildingList.get(0).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(0).getBuildTime()) % 24 == 0) {
-            unit.addVillager(unit.getVillagerGenRate());
-            resource.addWood(-1);
+            unit.addVillager(((House) buildingList.get(0)).getVillagerGenRate());
+            resource.reduceResource(buildingList.get(0).getEffectResource());
+            buildingList.get(0).setBuildTime(time);
         }
         //增加士兵
-        if (isEnough(new Resource(2, 2, 0)) &&
+        if (isEnough(buildingList.get(2).getEffectResource()) &&
                 buildingList.get(2).isOnOff() &&
                 buildingList.get(2).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(2).getBuildTime()) % 3 == 0) {
-            unit.addArmy(unit.getArmyGenRate());
-            resource.addWood(-2);
-            resource.addSteel(-2);
+            unit.addArmy(((Barracks) buildingList.get(2)).getArmyGenRate());
+            resource.reduceResource(buildingList.get(2).getEffectResource());
+            buildingList.get(2).setBuildTime(time);
+
         }
         //增加飛機
         if (isEnough(new Resource(0, 0, 5 * buildingList.get(7).getBuildingLevel())) &&
                 buildingList.get(7).isOnOff() &&
                 buildingList.get(7).getBuildCheck() == Building.BuildCheck.UNBUILDABLE &&
                 (time - buildingList.get(7).getBuildTime()) % 3 == 0) {
-            unit.addAircraft(unit.getAircraftGenRate());
-            resource.addGas(-5);
+            unit.addAircraft(((AirFactory) buildingList.get(7)).getAircraftGenRate());
+            resource.reduceResource(buildingList.get(7).getEffectResource());
+            buildingList.get(7).setBuildTime(time);
         }
         //減少建築所需時間
         reduceBuildingNeedTime();
@@ -96,8 +91,6 @@ public class NewStatus {
         reduceUpgradeNeedTime();
 
         //判定能不能升級
-
-
     }
 
     /**
@@ -138,19 +131,48 @@ public class NewStatus {
                 building.reduceUpgradeNeedTime();
                 if (building.getUpgradeNeedTime() == 0) {
                     building.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                    upgradeBuild(i + 1); //升級完成後效果產生
+                    building.upgrade();
                 }
             }
         }
     }
 
     /**
-     * //選擇建造
+     * (主動)分配人力
+     *
+     * @param woodPeople
+     * @param steelPeople
+     * @return
+     */
+    public boolean distribute(int woodPeople, int steelPeople) {
+        villagerReset();
+        boolean isEnoughVillager = false;
+        if (unit.getVillagerCount() >= woodPeople + steelPeople) {
+            resource.addWoodPeople(woodPeople);
+            resource.setSteelPeople(steelPeople);
+            unit.addVillager((woodPeople + steelPeople) * -1);
+            isEnoughVillager = true;
+        }
+        return isEnoughVillager;
+    }
+
+    /**
+     * 召集市民回歸
+     */
+    public void villagerReset() {
+        unit.addVillager(resource.getWoodPeople() + resource.getSteelPeople());
+        resource.setSteelPeople(0);
+        resource.setWoodPeople(0);
+    }
+
+    /**
+     * (主動)選擇建造
      *
      * @param //建築物編號
      * @return//是否可以建造(並變成建造中)
      */
     public boolean build(int opt) {
+        int civilLevel = ((University) buildingList.get(1)).getCivilLevel();
         boolean isBuildable = false;
         if (civilLevel >= buildingList.get(opt - 1).getNeedCivilLevel()
                 && isEnough(buildingList.get(opt - 1).getBuildResource())
@@ -165,18 +187,18 @@ public class NewStatus {
     }
 
     /**
-     * //選擇升級
+     * (主動)選擇升級
      *
      * @param //建築物編號
      * @return //是否可以升級(變成升級中)
      */
     public boolean upgrade(int opt) {
         boolean isUpgradable = false;
-        if (opt == 2 && civilLevel == 3) {
+        if (opt == 2 && ((University)buildingList.get(1)).getCivilLevel() == 3) {
             System.out.println("文明等級已達上限，研究所無法升級");
-        } else if (civilLevel >= buildingList.get(opt - 1).getUpNeedCivilLevel()) {
+        } else if (((University)buildingList.get(1)).getCivilLevel() >= buildingList.get(opt - 1).getUpNeedCivilLevel()) {
             System.out.println("文明等級不足");
-        } else if (civilLevel >= buildingList.get(opt - 1).getUpNeedCivilLevel() &&
+        } else if (((University)buildingList.get(1)).getCivilLevel() >= buildingList.get(opt - 1).getUpNeedCivilLevel() &&
                 isEnough(buildingList.get(opt - 1).getUpgradeResource()) &&
                 buildingList.get(opt - 1).getUpgradeCheck() == Building.UpgradeCheck.UPGRADEABLE) {
             resource.reduceResource(buildingList.get(opt - 1).getUpgradeResource());
@@ -187,8 +209,8 @@ public class NewStatus {
     }
 
     /**
-     * @param //資源
-     * @return //是否夠資源
+     * @param r 資源
+     * @return 是否夠資源
      */
     public boolean isEnough(Resource r) {
         if (resource.getWood() < r.getWood() || resource.getSteel() < r.getSteel() || resource.getGas() < r.getGas()) {
@@ -197,76 +219,80 @@ public class NewStatus {
         return true;
     }
 
-    /**
-     * 建築物升級完成時發動效果
-     *
-     * @param opt //建築物編號
-     */
-    public void upgradeBuild(int opt) {
-        switch (opt) {
-            case 1:
-                unit.setVillagerGenRate(unit.getVillagerGenRate() + 2);
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 2:
-                civilLevel++;
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(24);
-                if (civilLevel >= 2) {
-                    buildingList.get(opt - 1).setUpgradeResource(new Resource(60, 30, 10));
-                }
-                break;
-            case 3:
-                unit.setArmyGenRate(unit.getArmyGenRate() + 2);
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 4:
-                resource.setWoodRate(resource.getWoodRate() + 2);
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 5:
-                resource.setSteelRate(resource.getSteelPeople() + 1);
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 6:
-                unit.setArmyLife(unit.getArmyLife() + 3);
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(48);
-                break;
-            case 7:
-                resource.setGasRate(resource.getGasRate() + 1);
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(30);
-                break;
-            case 8:
-                //消耗資源要增加
-                buildingList.get(opt - 1).setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-                buildingList.get(opt - 1).setUpgradeNeedTime(48);
-                break;
-        }
-    }
-
     public void showManual() {
-        System.out.println("《遊戲操作手冊》");
+        System.out.println("\n《遊戲指令操作手冊》");
         System.out.println("manual : 操作說明");
         System.out.println("status : 顯示狀態");
         System.out.println("dist w s : 分配採集資源人數 如(dist 12 8 >> 伐木12人及煉鋼8人)");
-        System.out.println("build b  : 建造建築物       如(build 3   >> 建造兵營)");
-        System.out.println("nexthours(hr) : 時間進行 hr小時");
-        System.out.println("建築物編號和功能介紹:");
-        System.out.println("1.房屋  :(建造成本:"+") \t每24小時產生市民+1\t" + "(升級成本:木材50 鋼鐵20 文明等級2)\t每24小時產生市民+2");
-        System.out.println("2.研究所:(建造成本:木材10 鋼鐵5) \t可升級建築等級\t\t" + "(升級成本:木材30 鋼鐵15 文明等級)\t文明等級+1");
-        System.out.println("3.軍營  :(建造成本:木材20 鋼鐵10)\t每 3小時產生士兵+1\t" + "(升級成本:木材30 鋼鐵15 文明等級2)\t每3小時產生士兵+2");
-        System.out.println("4.筏木場:(建造成本:木材15 鋼鐵0) \t採集木材效率+1\t\t" + "(升級成本:木材30 鋼鐵15 文明等級2)\t採集木材效率+2");
-        System.out.println("5.煉鋼場:(建造成本:木材15 鋼鐵5) \t採集鋼鐵效率+1\t\t" + "(升級成本:木材30 鋼鐵15 文明等級2)\t採集鋼鐵效率+2");
-        System.out.println("6.兵工廠:(建造成本:木材30 鋼鐵5) \t文明等級須達到2\t" + "(升級成本:木材30 鋼鐵15 文明等級2)\t升級士兵，生命+3");
-        System.out.println("7.瓦斯場:(建造成本:木材15 鋼鐵5) \t文明等級須達到2\t" + "(升級成本:木材40 鋼鐵15 文明等級3)\t升級士兵，生命+3");
-        System.out.println("8.飛機場:(建造成本:木材15 鋼鐵5 瓦斯5) \t文明等級須達到2\t" + "(升級成本:木材40 鋼鐵15 文明等級3)\t升級士兵，生命+3");
+        System.out.println("build    : 建造建築物");
+        System.out.println("upgrade  : 升級建築物");
+        System.out.println("nexthours(hr) : 時間進行 hr 小時");
     }
 
+    public void showBuilding() {
+        System.out.println("《建築物編號和功能介紹》");
+        for (int i = 0; i < getBuildingList().size(); i++) {
+            getBuildingList().get(i).printBuild();
+        }
+//        System.out.println("1.房屋　:(建造成本:木材" +  "鋼鐵0) \t功能：每24小時產生市民+1\t" + "(升級成本:木材50 鋼鐵20)\t每24小時產生市民+2");
+//        System.out.println("2.研究所:(建造成本:木材10 鋼鐵5) \t功能：可升級建築等級\t\t" + "(升級成本:木材30 鋼鐵15)\t文明等級+1");
+//        System.out.println("3.軍營　:(建造成本:木材20 鋼鐵10)\t功能：每 3小時產生士兵+1\t" + "(升級成本:木材30 鋼鐵15)\t每 3小時產生士兵+2");
+//        System.out.println("4.伐木場:(建造成本:木材15 鋼鐵0) \t功能：採集木材效率+1\t\t" + "(升級成本:木材30 鋼鐵15)\t採集木材效率+2");
+//        System.out.println("5.煉鋼場:(建造成本:木材15 鋼鐵5) \t功能：採集鋼鐵效率+1\t\t" + "(升級成本:木材30 鋼鐵15)\t採集鋼鐵效率+2");
+//        System.out.println("6.兵工廠:(建造成本:木材30 鋼鐵5) \t功能：文明等級須達到2\t\t" + "(升級成本:木材30 鋼鐵15)\t升級士兵，生命+3");
+    }
 
+    public void showUpgrade() {
+        System.out.println("《建築物編號和升級功能介紹》");
+        for (int i = 0; i < getBuildingList().size(); i++) {
+            getBuildingList().get(i).printUpgrade();
+        }
+//        System.out.println("1.房屋　:(升級成本:木材50 鋼鐵20) \t功能：每24小時產生市民+1\t" + "(升級成本:木材50 鋼鐵20)\t每24小時產生市民+2");
+//        System.out.println("2.研究所:(升級成本:木材30 鋼鐵15) \t功能：可升級建築等級\t\t" + "(升級成本:木材30 鋼鐵15)\t文明等級+1");
+//        System.out.println("3.軍營　:(升級成本:木材30 鋼鐵15)\t功能：每 3小時產生士兵+1\t" + "(升級成本:木材30 鋼鐵15)\t每 3小時產生士兵+2");
+//        System.out.println("4.伐木場:(升級成本:木材30 鋼鐵15) \t功能：採集木材效率+1\t\t" + "(升級成本:木材30 鋼鐵15)\t採集木材效率+2");
+//        System.out.println("5.煉鋼場:(升級成本:木材30 鋼鐵15) \t功能：採集鋼鐵效率+1\t\t" + "(升級成本:木材30 鋼鐵15)\t採集鋼鐵效率+2");
+//        System.out.println("6.兵工廠:(升級成本:木材30 鋼鐵15) \t功能：文明等級須達到2\t\t" + "(升級成本:木材30 鋼鐵15)\t升級士兵，生命+3");
+    }
+
+    public void showStatus() {
+        System.out.println("\n《目前城市狀態》");
+        System.out.println("時間: 第" + getTime() + "小時" +
+                "\t文明等級: " + ((University)buildingList.get(1)).getCivilLevel());
+        System.out.println("總市民數: " + getUnit().getVillagerCount() +
+                "\t總士兵數: " + getUnit().getArmyCount() +
+                "\t總飛機數: " + getUnit().getAircraftCount());
+        System.out.println("現有木材: " + getResource().getWood() +
+                "\t採集木材人數: " + getResource().getWoodPeople() + "人" +
+                "\t採集木材效率: 每小時採集 " + getResource().getWoodRate() + " 木材");
+        System.out.println("現有鋼鐵: " + getResource().getSteel() +
+                "\t採集鋼鐵人數: " + getResource().getSteelPeople() + "人" +
+                "\t採集鋼鐵效率: 每小時採集" + getResource().getSteelRate() + " 鋼鐵");
+        System.out.println("現有瓦斯: " + getResource().getGas() +
+                "\t市民無法採集瓦斯，請建造瓦斯廠來生產瓦斯" +
+                "\t生產瓦斯效率: 每小時生產" + getResource().getGasRate() + " 瓦斯");
+        System.out.println();
+        for (int i = 0; i < buildingList.size(); i++) {
+            Building build = buildingList.get(i);
+            System.out.println(
+                    "編號:" + build.getNumber() +
+                    "\t房屋等級:" + build.getName() +
+                    "\t建築狀態:" + build.getBuildCheck() +
+                    "\t建築剩餘時間:" + build.getBuildNeedTime() +
+                    "\t升級狀態:" + build.getUpgradeCheck() +
+                    "\\t升級剩餘時間:" + build.getUpgradeNeedTime());
+        }
+//        System.out.println("建築狀態  0>>可建造 1>>建造中 2>>不可建造\t\t建築人數:" + building + "人");
+//        System.out.println("升級狀態  0>>可升級 1>>升級中");
+//        System.out.println("建築完成時間  -1>>未建造 n>>於遊戲時間n時建造完成");
+//        for (int i = 0; i < building.buildingObj.size(); i++) {
+//            System.out.print("\t編號:" + building.buildingObj.get(i)[0]);
+//            System.out.print("\t房屋等級:" + building.buildingObj.get(i)[1]);
+//            System.out.print("\t建築狀態:" + building.buildingObj.get(i)[8]);
+//            System.out.print("\t建築剩餘時間:" + building.buildingObj.get(i)[9]);
+//            System.out.print("\t建築完成時間:" + building.buildingObj.get(i)[10]);
+//            System.out.print("\t升級狀態:" + building.buildingObj.get(i)[4]);
+//            System.out.println("\t升級剩餘時間:" + building.buildingObj.get(i)[7]);
+
+    }
 }

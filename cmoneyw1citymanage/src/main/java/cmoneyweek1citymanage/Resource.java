@@ -19,12 +19,11 @@ public class Resource {
         this.steel = steel;
         this.wood = wood;
     }
-
     public Resource() {
 
     }
 
-    
+
     public int getWood() {
         return wood;
     }

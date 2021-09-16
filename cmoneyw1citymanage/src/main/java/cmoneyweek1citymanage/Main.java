@@ -67,10 +67,15 @@ public class Main {
 
             // 指令status >> 顯示狀態指令
             if (order.equals("status")) {
-                status.showStatus(newStatus);//秀出資訊
+                status.showStatus(newStatus);  //秀出資訊
             }
 
-//            // 採集分配指令
+            // 採集分配指令
+            if (order.equals("dist")) {
+                int woodPeople = sc.nextInt();
+                int steelPeople = sc.nextInt();
+                newStatus.distribute(woodPeople, steelPeople);
+            }
 //            if (order.equals("dist")) {
 //                //System.out.println("請輸入2個參數分配採集木頭與鋼鐵人數 如\n2 4");
 //                resource.distribution(Integer.parseInt(orderArray[1]), Integer.parseInt(orderArray[2]));
@@ -85,7 +90,7 @@ public class Main {
 
             // 建造指令
             if (order.equals("build")) {
-                status.showBuilding(newStatus);
+                status.showBuilding();
                 System.out.print("請選擇要建造的建築物:");
                 // 輸入建築物編號
                 int opt = sc.nextInt();
@@ -100,7 +105,7 @@ public class Main {
 
             // 升級指令
             if (order.equals("upgrade")) {
-                status.showUpgrade(newStatus);
+                newStatus.showUpgrade();
                 System.out.print("請選擇要升級的建築物:");
                 // 輸入建築物編號
                 int opt = sc.nextInt();
@@ -203,9 +208,7 @@ public class Main {
                 // 輸入經過小時
                 int hr = sc.nextInt();
                 // 看經過幾小時就跑幾次nextHour
-                for (int i = 0; i < hr; i++) {
-                    newStatus.nextHour();
-                }
+                newStatus.nextHours(hr);
             }
 //---------------------------------------------------------------------//新增
 //            if (orderArray[0].substring(0,4).equals("next")) { //1小時

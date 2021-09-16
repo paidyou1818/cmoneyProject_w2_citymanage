@@ -1,14 +1,5 @@
 package cmoneyweek1citymanage;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author kisso
- */
 public class AirFactory extends Building{
     private int aircraftGenRate;//飛機生產速度
 
@@ -52,7 +43,6 @@ public class AirFactory extends Building{
         aircraftGenRate = this.getBuildingLevel();
         return aircraftGenRate;
     }
-
 
     /**
      * 印出建造資訊
