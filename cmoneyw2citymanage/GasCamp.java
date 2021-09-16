@@ -9,7 +9,8 @@
  * @author kisso
  */
 public class GasCamp extends Building{
-    private final int upgradeResetTime = 30;
+    private int gasRate ;
+
     public GasCamp(){
 
         //建築編號
@@ -34,13 +35,21 @@ public class GasCamp extends Building{
         this.setUpgradeResource(new Resource(40,20,0));
         //升級狀態
         this.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-        //升級所需時間
+        //升級剩餘時間
         this.setUpgradeNeedTime(30);
+        //升級所需時間
+        this.setUpgradeResetTime(30);
         //建築物功能開關
         this.setOnOff(false);
         //升級需要文明等級
         this.setUpNeedCivilLevel(3);
     }
     
+    public int getGasRate() {
+        
+        gasRate = this.getBuildingLevel()+4;
+
+        return gasRate;
+    }
 
 }

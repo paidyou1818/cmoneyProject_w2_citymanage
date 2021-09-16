@@ -10,8 +10,10 @@
  */
 public class MiningCamp extends Building{
     private final int upgradeResetTime = 30;
+    private int steelRate ;
+    
     public MiningCamp(){
-
+        //建築物狀態
         //建築編號
         this.setNumber(5);
         //建築名稱
@@ -34,13 +36,28 @@ public class MiningCamp extends Building{
         this.setUpgradeResource(new Resource(15,5,0));
         //升級狀態
         this.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-        //升級所需時間
+        //升級剩餘時間
         this.setUpgradeNeedTime(30);
+        //升級所需時間
+        this.setUpgradeResetTime(30);
         //建築物功能開關
         this.setOnOff(false);
         //升級需要文明等級
         this.setUpNeedCivilLevel(2);
+        
     }
+
+    public int getSteelRate() {
+        
+        steelRate = this.getBuildingLevel()+1;
+        if(this.getBuildCheck().equals(Building.BuildCheck.UNBUILDABLE)){
+            steelRate ++;
+        }
+        return steelRate;
+    }
+
+    
+    
     
 
 }

@@ -9,7 +9,14 @@
  * @author kisso
  */
 public class House extends Building{
-    private final int upgradeResetTime = 30;
+    /**
+     * 升級所需時間
+     * 村民生命值
+     * 村民生產速度
+     */
+    private int villagerGenRate;
+    private int villagerLife;
+
     public House(){
         //建築編號
         this.setNumber(1);
@@ -33,8 +40,10 @@ public class House extends Building{
         this.setUpgradeResource(new Resource(30,15,0));
         //升級狀態
         this.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-        //升級所需時間
+        //升級剩餘時間
         this.setUpgradeNeedTime(30);
+        //升級所需時間
+        this.setUpgradeResetTime(30);
         //建築物功能開關
         this.setOnOff(false);
         //自動生產消耗資源
@@ -42,6 +51,12 @@ public class House extends Building{
         //升級需要文明等級
         this.setUpNeedCivilLevel(2);
     }
+
+    public int getVillagerGenRate() {
+        villagerGenRate = this.getBuildingLevel()*2-1;
+        return villagerGenRate;
+    }
+    
     
 
 }

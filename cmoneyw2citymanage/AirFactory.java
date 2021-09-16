@@ -9,6 +9,9 @@
  * @author kisso
  */
 public class AirFactory extends Building{
+    private int aircraftGenRate;//飛機生產速度
+
+
     public AirFactory(){
         //設定參數，無法升級，相關選項未設定(檢查是否會報錯)
         //建築編號
@@ -37,7 +40,14 @@ public class AirFactory extends Building{
         this.setEffectResource(new Resource(0,0,5));
         //升級需要文明等級
         this.setUpNeedCivilLevel(3);
+        
     }
-    
+    public int getAircraftGenRate() {
+        //飛機生產速度=房屋等級*1
+        aircraftGenRate = this.getBuildingLevel();
+        return aircraftGenRate;
+    }
+
+
 
 }

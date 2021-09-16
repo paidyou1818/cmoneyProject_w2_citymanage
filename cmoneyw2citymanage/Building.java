@@ -16,6 +16,7 @@ public class Building {
     private Resource upgradeResource;
     private UpgradeCheck upgradeCheck;//enum
     private int upgradeNeedTime;
+    private int upgradeResetTime;
 
     private boolean onOff;
     private Resource effectResource;
@@ -152,6 +153,10 @@ public class Building {
     public void setUpgradeNeedTime(int upgradeNeedTime) {
         this.upgradeNeedTime = upgradeNeedTime;
     }
+    
+    public void setUpgradeResetTime(int upgradeResetTime){
+        this.upgradeResetTime = upgradeResetTime;
+    }
 
     public boolean isOnOff() {
         return onOff;
@@ -168,7 +173,11 @@ public class Building {
     public void setEffectResource(Resource effectResource) {
         this.effectResource = effectResource;
     }
-
+    
+    //升級重置
+    public void upgradeReset(){
+        setUpgradeNeedTime(upgradeResetTime);
+    }
 
 }
 

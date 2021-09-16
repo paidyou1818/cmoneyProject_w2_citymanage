@@ -9,7 +9,6 @@
  * @author kisso
  */
 public class University extends Building{
-    private final int upgradeResetTime = 24;
     public University(){
 
         //建築編號
@@ -34,8 +33,10 @@ public class University extends Building{
         this.setUpgradeResource(new Resource(50,20,0));
         //升級狀態
         this.setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
-        //升級所需時間
+        //升級剩餘時間
         this.setUpgradeNeedTime(24);
+        //升級所需時間
+        this.setUpgradeResetTime(24);
         //建築物功能開關
         this.setOnOff(false);
         //升級需要文明等級
