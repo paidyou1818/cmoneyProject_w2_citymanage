@@ -66,22 +66,20 @@ public class Zombie {
             unit.setAircraftCount(0);
             unit.setVillagerCount(0);
             //未增加房屋攻擊-------------------------------------------------------------------------------------------
-            if (airValue > 0) {
+            while (airValue > 0) {
                 ArrayList<Building> tempBuildingList = new ArrayList<>();
                 for (Building building : buildingList) {
                     if (building.getBuildCheck() == Building.BuildCheck.UNBUILDABLE) {
                         tempBuildingList.add(building);
                     }
                 }
-                while (airValue > 0) {
-                    Building buildingIsAttacked = tempBuildingList.get(random.nextInt(tempBuildingList.size()));
-                    if (airValue >= buildingIsAttacked.getLife()) {
-                        airValue -= buildingIsAttacked.getLife();
-                        buildingIsAttacked.setLife(0);
-                        //要記得房屋毀壞要做的事
-                    } else {
-                        buildingIsAttacked.setLife(buildingIsAttacked.getLife() - airValue);
-                    }
+                Building buildingIsAttacked = tempBuildingList.get(random.nextInt(tempBuildingList.size()));
+                if (airValue >= buildingIsAttacked.getLife()) {
+                    airValue -= buildingIsAttacked.getLife();
+                    buildingIsAttacked.setLife(0);
+                    //要記得房屋毀壞要做的事
+                } else {
+                    buildingIsAttacked.setLife(buildingIsAttacked.getLife() - airValue);
                 }
             }
             //顯示哪間房屋被攻擊，多少傷害(未增加在showZombie)
@@ -111,6 +109,22 @@ public class Zombie {
             unit.setArmyCount(0);
             //未增加房屋攻擊-------------------------------------------------------------------------------------------
 
+            while (airValue > 0) {
+                ArrayList<Building> tempBuildingList = new ArrayList<>();
+                for (Building building : buildingList) {
+                    if (building.getBuildCheck() == Building.BuildCheck.UNBUILDABLE) {
+                        tempBuildingList.add(building);
+                    }
+                }
+                Building buildingIsAttacked = tempBuildingList.get(random.nextInt(tempBuildingList.size()));
+                if (airValue >= buildingIsAttacked.getLife()) {
+                    airValue -= buildingIsAttacked.getLife();
+                    buildingIsAttacked.setLife(0);
+                    //要記得房屋毀壞要做的事
+                } else {
+                    buildingIsAttacked.setLife(buildingIsAttacked.getLife() - airValue);
+                }
+            }
 
             //顯示哪間房屋被攻擊，多少傷害(未增加在showZombie)
             //-------------------------------------------------------------------------------------------------------
