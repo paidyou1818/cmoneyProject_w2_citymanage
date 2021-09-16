@@ -1,8 +1,7 @@
 
-/**
- * 我軍單位
- */
+
 public class Unit {
+
     private int villagerLife = 1;//起始村民數值
     private int villagerCount = 20;//起始村民人數
     private int villagerGenRate = 1;//起始生產村民速率
@@ -14,6 +13,8 @@ public class Unit {
     private int aircraftLife = 2; //起始飛機數值
     private int aircraftCount = 0; //起始飛機數量
     private int aircraftGenRate = 0; //起始飛機數值
+
+
 
     public int getVillagerLife() {
         return villagerLife;
