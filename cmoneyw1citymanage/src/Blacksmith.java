@@ -1,6 +1,4 @@
-package cmoneyweek1citymanage;
-
-public class Blacksmith extends Building{
+public class Blacksmith extends Building {
     private int armyLife; //士兵生命值
     private int armyLevel;//士兵等級
 
@@ -13,36 +11,24 @@ public class Blacksmith extends Building{
         this.setNumber(6);
         //建築名稱
         this.setName("兵工廠");
-        //建築等級
-        this.setBuildingLevel(1);
-        //建築滿血生命值
-        setLifeFull(30);
-        //建築當前生命值
-        setLife(getLifeFull());
+        //建築生命值
+        setLife(30);
         //建造所需資源
         this.setBuildResource(new Resource(30,10,0));
-        //建築狀態
-        this.setBuildCheck(Building.BuildCheck.BUILDABLE);
         //建造所需時間
         setInitialBuildTime(3);
         //建築剩餘時間
         setBuildNeedTime(getInitialBuildTime());
-        //建築建好時間
-        this.setBuildTime(-1);
         //建造需要文明等級
         this.setNeedCivilLevel(2);
         //升級所需資源
         this.setUpgradeResource(new Resource(70,40,0));
-        //升級狀態
-        this.setUpgradeCheck(Building.UpgradeCheck.NOTUPGRADEABLE);
-        //建築物功能開關
-        this.setOnOff(false);
         //升級需要文明等級
         this.setUpNeedCivilLevel(2);
 
 
         //起始士兵等級是1
-        armyLevel = 1;
+        this.armyLevel = 1;
         //起始飛機等級是1
         this.aircraftLevel = 1;
 
@@ -50,7 +36,7 @@ public class Blacksmith extends Building{
     }
 
     //升級士兵>>士兵等級+1
-    //士兵生命值改動    
+    //士兵生命值改動
     public void upgradeArmy() {
         this.armyLevel ++;
     }
@@ -86,19 +72,19 @@ public class Blacksmith extends Building{
     @Override
     public void printBuild() {
         System.out.println(getNumber() + "." + getName() +
-                            "　:(建造成本:木材" + getBuildResource().getWood() +
-                            " 鋼鐵" + getBuildResource().getSteel() +
-                            " 所需文明等級: " + getNeedCivilLevel() +
-                            " )\t功能：可以升級士兵及飛機");
+                "　:(建造成本:木材" + getBuildResource().getWood() +
+                " 鋼鐵" + getBuildResource().getSteel() +
+                " 所需文明等級: " + getNeedCivilLevel() +
+                " )\t功能：可以升級士兵及飛機");
     }
 
     //印出升級資訊
     @Override
     public void printUpgrade() {
         System.out.println(getNumber() + "." + getName() +
-                            "　:(升級成本:木材" + getUpgradeResource().getWood() +
-                            " 鋼鐵" + getUpgradeResource().getSteel() +
-                            " 所需文明等級: " + getUpNeedCivilLevel() +
-                            " )\t升級功能:可以選擇升級士兵科技或飛機科技");
+                "　:(升級成本:木材" + getUpgradeResource().getWood() +
+                " 鋼鐵" + getUpgradeResource().getSteel() +
+                " 所需文明等級: " + getUpNeedCivilLevel() +
+                " )\t升級功能:可以選擇升級士兵科技或飛機科技");
     }
 }

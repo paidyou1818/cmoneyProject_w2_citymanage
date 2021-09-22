@@ -1,7 +1,5 @@
-package cmoneyweek1citymanage;
-
 public class Unit {
-    private int villagerCount = 20;//村民人數
+    private int villagerCount = 0;//村民人數
     private int armyCount = 10; //士兵人數
     private int aircraftCount = 0; //飛機數量
 
