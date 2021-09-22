@@ -2,48 +2,41 @@ public class Building {
 
     private int number;
     private String name;
-    private int buildingLevel;//建築物等級
-    private int life;//當前生命值
+    private int buildingLevel;
+    private int life;
+    private int lifeFull;
+    private int initialLife;
     private Resource buildResource;
     private BuildCheck buildCheck;//enum
-    private int buildNeedTime;//建造剩餘時間
-    private int initialBuildTime;//起始建造時間
-    private int buildTime;//建造完成時間
-    private int needCivilLevel;//建造需要文明
-
-    private int upNeedCivilLevel;//升級需要文明
+    private int buildNeedTime;
+    private int buildTime;
+    private int initialBuildTime;
+    private int needCivilLevel;
+    private int upNeedCivilLevel;
 
     private Resource upgradeResource;
     private UpgradeCheck upgradeCheck;//enum
-    private int upgradeNeedTime;//升級剩餘時間
-    private int upgradeResetTime;//起始升級時間
+    private int upgradeNeedTime;
+    private int upgradeResetTime;
 
     private boolean onOff;
     private Resource effectResource;
-
-    public Building(){
-        //建築等級
-        setBuildingLevel(1);
-        //建築建好時間
-        setBuildTime(-1);
-        //建築狀態
-        setBuildCheck(Building.BuildCheck.BUILDABLE);
-        //升級狀態
-        setUpgradeCheck(UpgradeCheck.NOTUPGRADEABLE);
-        //建築物功能開關
-        setOnOff(false);
-    }
 
     /**
      * 可否建造檢查
      */
     public enum BuildCheck {
-        BUILDABLE("可以建造"),
-        BUILDGOINGON("建造ing"),
-        UNBUILDABLE("不可建造");
-        public String label;
-        private BuildCheck(String label){
-            this.label = label;
+        BUILDABLE("尚未建造"),
+        BUILDGOINGON("正在建造"),
+        UNBUILDABLE("已建完畢");
+        private String buildChecking;
+
+        private BuildCheck(String buildChecking) {
+            this.buildChecking = buildChecking;
+        }
+
+        public String getBuildChecking() {
+            return buildChecking;
         }
     }
 
@@ -51,12 +44,17 @@ public class Building {
      * 可否升級檢查
      */
     public enum UpgradeCheck {
-        UPGRADEABLE("可以升級"),
-        UPGRADING("升級ing"),
+        UPGRADEABLE("可升級"),
+        UPGRADING("升級中"),
         NOTUPGRADEABLE("不可升級");
-        public String label;
-        private UpgradeCheck(String label){
-            this.label = label;
+        private String updateChecking;
+
+        private UpgradeCheck(String updateChecking) {
+            this.updateChecking = updateChecking;
+        }
+
+        public String getBuildChecking() {
+            return updateChecking;
         }
     }
 
@@ -72,14 +70,10 @@ public class Building {
     }
 
 
-    /**
-     * Getter & Setter
-     * @return
-     */
     public int getNumber() {
         return number;
     }
-    //設定編號
+
     public void setNumber(int number) {
         this.number = number;
     }
@@ -87,7 +81,7 @@ public class Building {
     public String getName() {
         return name;
     }
-    //設定名稱
+
     public void setName(String name) {
         this.name = name;
     }
@@ -95,7 +89,7 @@ public class Building {
     public int getBuildingLevel() {
         return buildingLevel;
     }
-    //設定起始等級
+
     public void setBuildingLevel(int buildingLevel) {
         this.buildingLevel = buildingLevel;
     }
@@ -103,9 +97,17 @@ public class Building {
     public int getLife() {
         return life;
     }
-    //設定當前生命值
+
     public void setLife(int life) {
         this.life = life;
+    }
+
+    public int getLifeFull() {
+        return lifeFull;
+    }
+
+    public void setLifeFull(int lifeFull) {
+        this.lifeFull = lifeFull;
     }
 
     public Resource getBuildResource() {
@@ -160,16 +162,16 @@ public class Building {
         return upgradeResource;
     }
 
-    public void setUpgradeResource(Resource upgradeResource) {
-        this.upgradeResource = upgradeResource;
-    }
-
     public UpgradeCheck getUpgradeCheck() {
         return upgradeCheck;
     }
 
     public void setUpgradeCheck(UpgradeCheck upgradeCheck) {
         this.upgradeCheck = upgradeCheck;
+    }
+
+    public void setUpgradeResource(Resource upgradeResource) {
+        this.upgradeResource = upgradeResource;
     }
 
     public int getUpNeedCivilLevel() {
@@ -204,21 +206,8 @@ public class Building {
         this.onOff = onOff;
     }
 
-
-    /**
-     * 遊戲進行中的動作
-     * 建造、升級
-     */
-    //升級完成
-    //等級++、改成無法升級
-    public void upgrade() {
-        buildingLevel++;
-        setUpgradeCheck(UpgradeCheck.NOTUPGRADEABLE);
-    }
-    //判斷是否滿等
-    //未滿等則重置升級狀態及時間
+    //可重複升級
     public void upgradeReset() {
-        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
         setUpgradeNeedTime(upgradeResetTime);
     }
 
@@ -227,12 +216,10 @@ public class Building {
         setBuildNeedTime(initialBuildTime);
     }
 
+    public void initialLife() {
+        setLife(initialLife);
+    }
 
-    /**
-     * 給固定消耗資源產生功能的建築物
-     * 房屋、軍營、飛機工廠
-     * @return
-     */
     public Resource getEffectResource() {
         return effectResource;
     }
@@ -241,28 +228,26 @@ public class Building {
         this.effectResource = effectResource;
     }
 
-    /**
-     * 給有生產速率之建築物
-     * 房屋、軍營、飛機工廠
-     * 伐木場、煉鋼廠、瓦斯場
-     * @return
-     */
     public int getRate() {
         return 0;
     }
 
+    public void upgrade() {
+        buildingLevel++;
+        upgradeReset();
+        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
+    }
 
-    /**
-     * 印出各自的資訊
-     * 建立空的方法
-     */
+    public int getInitialLife() {
+        return initialLife;
+    }
 
-    //印出各自的建造資訊
+    //印出建造資訊
     public void printBuild() {
 
     }
 
-    //印出各自的升級資訊
+    //印出升級資訊
     public void printUpgrade() {
 
     }

@@ -62,21 +62,21 @@ public class Resource {
 
     public void addGas(int value) {
         gas += value;
-        if (gas == 0) {
+        if (gas == 0 && value < 0) {
             System.out.println("已無瓦斯");
         }
     }
 
     public void addWood(int value) {
         wood += value;
-        if (wood == 0) {
+        if (wood == 0 && value < 0) {
             System.out.println("已無木材");
         }
     }
 
     public void addSteel(int value) {
         steel += value;
-        if (steel == 0) {
+        if (steel == 0 && value < 0) {
             System.out.println("已無鋼鐵");
         }
     }
@@ -102,6 +102,6 @@ public class Resource {
     }
 
     public String toString() {
-        return "木材:" + wood + " 鋼鐵:" + steel + " 瓦斯:" + gas;
+        return "\n當前資源:  木材:" + wood + " 鋼鐵:" + steel + " 瓦斯:" + gas;
     }
 }

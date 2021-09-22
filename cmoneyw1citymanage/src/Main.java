@@ -1,9 +1,8 @@
-import java.util.Scanner;
-
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        Scanner sc = new Scanner(System.in);
+        NewStatus newStatus = new NewStatus();
+        Input input = newStatus.getInput();
 
         // 歡迎詞
         System.out.println("市長你好!歡迎來到愛好世界和平城市~\n" +
@@ -13,78 +12,150 @@ public class Main {
                 "英明的市長，快來領導人民，建築你們的城市吧!o(-`д´- ｡)");
 
         // 設置初始村名數量、初始時間、初始士兵數量、殭屍
-        NewStatus newStatus = new NewStatus();
 
         // 顯示狀態
         newStatus.showStatus();
 
-        // 顯示操作手冊
-        newStatus.showManual();
-
         // 判定是否還有村民or建築物，若均歸零則結束遊戲
-        while (newStatus.getUnit().getVillagerCount() > 0) {
+        while (!newStatus.isGameOver()) {
+            // 顯示操作手冊
+            Thread.sleep(500);
+            newStatus.showManual();
             System.out.print("\n市長請下令:");
             // 輸入指令(統一轉換為英文小寫)
-            String order = sc.next().toLowerCase();
+            int option = input.numberInput(1, 7);
+            switch (option) {
+                case 1:
+                    newStatus.showStatus();
+                    break;
+                case 2:
+                    newStatus.showBuildingStatus();
+                    break;
+                case 3:
+                    newStatus.distribute();
+                    break;
+                case 4:
+                    newStatus.showBuilding();
+                    System.out.println(newStatus.getResource());
+                    System.out.print("請選擇要建造的建築物:\n");
 
-            // 指令manual >> 顯示操作手冊
-            if (order.equals("manual")) {
-                newStatus.showManual();
+                    int opt = input.numberInput(1, 8);
+                    if (newStatus.build(opt)) {
+                        System.out.println("開始建造" + newStatus.getBuildingList().get(opt - 1).getName() +
+                                " 預計" + newStatus.getBuildingList().get(opt - 1).getBuildNeedTime() + "小時後完成");
+                    } else {
+                        System.out.println("無法建造" + newStatus.getBuildingList().get(opt - 1).getName() + "!");
+                    }
+                    break;
+                case 5:
+                    newStatus.showUpgrade();
+                    System.out.println(newStatus.getResource());
+                    System.out.print("請選擇要升級的建築物:\n");
+                    int choose = input.numberInput(1, 8);
+                    if (newStatus.upgrade(choose)) {
+                        System.out.println("開始升級" + newStatus.getBuildingList().get(choose - 1).getName() +
+                                " 預計" + newStatus.getBuildingList().get(choose - 1).getUpgradeNeedTime() + "小時後完成");
+                    } else {
+                        System.out.println("無法升級" + newStatus.getBuildingList().get(choose - 1).getName() + "!");
+                    }
+                    break;
+                case 6:
+                    System.out.println("請選擇要開關的建築物:\n");
+                    System.out.println("1.房屋     當前是否開啟中:" + newStatus.getBuildingList().get(0).isOnOff());
+                    System.out.println("3.軍營     當前是否開啟中:" + newStatus.getBuildingList().get(2).isOnOff());
+                    System.out.println("8.飛機工廠  當前是否開啟中:" + newStatus.getBuildingList().get(7).isOnOff());
+                    int choice = input.openCloseNumber();
+                    System.out.println("請選擇要開啟或關閉 1.開啟  2.關閉");
+                    int openOrClose = input.numberInput(1, 2);
+                    if (openOrClose == 1) {
+                        if (newStatus.openBuilding(choice, true)) {
+                            System.out.println("開啟成功");
+                        }
+                    } else {
+                        if (newStatus.openBuilding(choice, false)) {
+                            System.out.println("關閉成功");
+                        }
+                    }
+                    break;
+                case 7:
+                    System.out.println("市長請輸入要過幾小時:");
+                    // 輸入經過小時
+                    int hr = input.numberInput(1, 99999);
+                    // 看經過幾小時就跑幾次nextHour
+                    if (hr <= 5) {
+                        System.out.println(hr + "小時過後......\n");
+                        Thread.sleep(500);
+                    } else if (hr <= 12) {
+                        System.out.println("--------時間流逝中，請稍後----------\n");
+                        Thread.sleep(1200);
+                    } else {
+                        System.out.println("心情小語:在非洲，每過60秒，就會有一分鐘過去\n");
+                        Thread.sleep(1000);
+                        System.out.println("勤洗手，戴口罩，殭屍病毒遠離我\n");
+                        Thread.sleep(1200);
+                        System.out.println("天黑了就趕緊回家，免得出門在外被殭屍病毒傳染\n");
+                    }
+                    newStatus.nextHours(hr);
+                    break;
             }
-
-            // 指令status >> 顯示狀態指令
-            if (order.equals("status")) {
-                newStatus.showStatus();  //秀出資訊
-            }
-
-            // 採集分配指令
-            if (order.equals("dist")) {
-                int woodPeople = sc.nextInt();
-                int steelPeople = sc.nextInt();
-                newStatus.distribute(woodPeople, steelPeople);
-            }
-
-            // 建造指令
-            if (order.equals("build")) {
-                newStatus.showBuilding();
-                System.out.print("請選擇要建造的建築物:");
-                // 輸入建築物編號
-                int opt = sc.nextInt();
-                // 判定是否可以建造
-                if (newStatus.build(opt)) {
-                    System.out.println("開始建造" + newStatus.getBuildingList().get(opt - 1).getName() +
-                            " 預計" + newStatus.getBuildingList().get(opt - 1).getBuildNeedTime() + "小時後完成");
-                } else {
-                    System.out.println("無法建造" + newStatus.getBuildingList().get(opt - 1).getName() + "!");
-                }
-            }
-
-            // 升級指令
-            if (order.equals("upgrade")) {
-                newStatus.showUpgrade();
-                System.out.print("請選擇要升級的建築物:");
-                // 輸入建築物編號
-                int opt = sc.nextInt();
-                // 判定是否可以升級
-                if (newStatus.upgrade(opt)) {
-                    System.out.println("開始升級" + newStatus.getBuildingList().get(opt - 1).getName() +
-                            " 預計" + newStatus.getBuildingList().get(opt - 1).getUpgradeNeedTime() + "小時後完成");
-                } else {
-                    System.out.println("無法建造" + newStatus.getBuildingList().get(opt - 1).getName() + "!");
-                }
-            }
-
-            // 時間前進指令
-            if (order.equals("nexthours")) {
-                System.out.println("市長請輸入要過幾小時:");
-                // 輸入經過小時
-                int hr = sc.nextInt();
-                // 看經過幾小時就跑幾次nextHour
-                newStatus.nextHours(hr);
-            }
+//            // 指令man
+//            // ual >> 顯示操作手冊
+//            if (order.equals("manual")) {
+//                newStatus.showManual();
+//            }
+//
+//            // 指令status >> 顯示狀態指令
+//            if (order.equals("status")) {
+//                newStatus.showStatus();  //秀出資訊
+//            }
+//
+//            // 採集分配指令
+//            if (order.equals("dist")) {
+//                int woodPeople = sc.nextInt();
+//                int steelPeople = sc.nextInt();
+//                newStatus.distribute(woodPeople, steelPeople);
+//            }
+//
+//            // 建造指令
+//            if (order.equals("build")) {
+//                newStatus.showBuilding();
+//                System.out.print("請選擇要建造的建築物:");
+//                // 輸入建築物編號
+//                int opt = sc.nextInt();
+//                // 判定是否可以建造
+//                if (newStatus.build(opt)) {
+//                    System.out.println("開始建造" + newStatus.getBuildingList().get(opt - 1).getName() +
+//                            " 預計" + newStatus.getBuildingList().get(opt - 1).getBuildNeedTime() + "小時後完成");
+//                } else {
+//                    System.out.println("無法建造" + newStatus.getBuildingList().get(opt - 1).getName() + "!");
+//                }
+//            }
+//
+//            // 升級指令
+//            if (order.equals("upgrade")) {
+//                newStatus.showUpgrade();
+//                System.out.print("請選擇要升級的建築物:");
+//                // 輸入建築物編號
+//                int opt = sc.nextInt();
+//                // 判定是否可以升級
+//                if (newStatus.upgrade(opt)) {
+//                    System.out.println("開始升級" + newStatus.getBuildingList().get(opt - 1).getName() +
+//                            " 預計" + newStatus.getBuildingList().get(opt - 1).getUpgradeNeedTime() + "小時後完成");
+//                } else {
+//                    System.out.println("無法建造" + newStatus.getBuildingList().get(opt - 1).getName() + "!");
+//                }
+//            }
+//
+//            // 時間前進指令
+//            if (order.equals("nexthours")) {
+//                System.out.println("市長請輸入要過幾小時:");
+//                // 輸入經過小時
+//                int hr = sc.nextInt();
+//                // 看經過幾小時就跑幾次nextHour
+//                newStatus.nextHours(hr);
+//            }
         }
         System.out.println("\nGame Over!" +
-                "\n城市已被摧毀，市長請下次再來加油吧! இдஇ");
-
+                "\n城市已被摧毀，市長請下次再加油吧! இдஇ");
     }
 }
