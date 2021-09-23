@@ -1,29 +1,38 @@
 public class Building {
-
+    //建築物基本屬性
     private int number;
     private String name;
     private int buildingLevel;
     private int life;
-    private int lifeFull;
-    private int initialLife;
+    //建造相關資訊屬性
     private Resource buildResource;
     private BuildCheck buildCheck;//enum
     private int buildNeedTime;
-    private int buildTime;
     private int initialBuildTime;
+    private int buildTime;
     private int needCivilLevel;
-    private int upNeedCivilLevel;
-
+    //升級相關屬性
     private Resource upgradeResource;
     private UpgradeCheck upgradeCheck;//enum
     private int upgradeNeedTime;
     private int upgradeResetTime;
+    private int upNeedCivilLevel;
 
+    //建築物功能屬性
     private boolean onOff;
     private Resource effectResource;
+    private int genFrequency;
+    public Building() {
+        setBuildingLevel(1);
+        setBuildCheck(BuildCheck.BUILDABLE);
+        setNeedCivilLevel(1);
+        setBuildTime(-1);
+        setUpgradeCheck(UpgradeCheck.NOTUPGRADEABLE);
+        setOnOff(false);
+    }
 
     /**
-     * 可否建造檢查
+     * 可否建造、升級檢查
      */
     public enum BuildCheck {
         BUILDABLE("尚未建造"),
@@ -40,9 +49,6 @@ public class Building {
         }
     }
 
-    /**
-     * 可否升級檢查
-     */
     public enum UpgradeCheck {
         UPGRADEABLE("可升級"),
         UPGRADING("升級中"),
@@ -59,7 +65,7 @@ public class Building {
     }
 
     /**
-     * 需要建築時間-1
+     * 建築需要時間 升級需要時間-1
      */
     public void reduceBuildNeedTime() {
         buildNeedTime--;
@@ -69,6 +75,65 @@ public class Building {
         upgradeNeedTime--;
     }
 
+    //升級完成
+    public void upgrade() {
+        buildingLevel++;
+        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
+        setUpgradeNeedTime(upgradeResetTime);
+    }
+
+    //可重複升級
+    public void upgradeReset() {
+//        setUpgradeNeedTime(upgradeResetTime);
+//        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
+        //可更改下一次升級資源
+    }
+
+    public void buildComplete(int buildTime) {
+        setBuildCheck(BuildCheck.UNBUILDABLE);
+        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
+        setOnOff(true);
+        setBuildTime(buildTime);
+    }
+
+    //被摧毀後可重新建造
+    public void buildReset() {
+        setBuildCheck(BuildCheck.BUILDABLE);
+        setUpgradeCheck(UpgradeCheck.NOTUPGRADEABLE);
+        setBuildNeedTime(initialBuildTime);
+        setOnOff(false);
+    }
+
+    //生產力相關才有此功能
+    //房屋 軍營 飛機工廠
+    //伐木場 煉鋼廠 瓦斯場
+    public int getRate() {
+        return 0;
+    }
+
+    //印出建造，升級資訊
+    public void printBuild() {
+
+    }
+
+    public void printUpgrade() {
+
+    }
+
+
+
+
+    /**
+     * Getter & Setter
+     */
+
+    public int getGenFrequency() {
+        return genFrequency;
+    }
+
+    public void setGenFrequency(int frequency) {
+        this.genFrequency = frequency;
+    }
 
     public int getNumber() {
         return number;
@@ -100,14 +165,6 @@ public class Building {
 
     public void setLife(int life) {
         this.life = life;
-    }
-
-    public int getLifeFull() {
-        return lifeFull;
-    }
-
-    public void setLifeFull(int lifeFull) {
-        this.lifeFull = lifeFull;
     }
 
     public Resource getBuildResource() {
@@ -206,20 +263,6 @@ public class Building {
         this.onOff = onOff;
     }
 
-    //可重複升級
-    public void upgradeReset() {
-        setUpgradeNeedTime(upgradeResetTime);
-    }
-
-    //被摧毀後可重新建造
-    public void buildReset() {
-        setBuildNeedTime(initialBuildTime);
-    }
-
-    public void initialLife() {
-        setLife(initialLife);
-    }
-
     public Resource getEffectResource() {
         return effectResource;
     }
@@ -228,27 +271,13 @@ public class Building {
         this.effectResource = effectResource;
     }
 
-    public int getRate() {
-        return 0;
-    }
-
-    public void upgrade() {
-        buildingLevel++;
-        upgradeReset();
-        setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
-    }
-
-    public int getInitialLife() {
-        return initialLife;
-    }
-
-    //印出建造資訊
-    public void printBuild() {
-
-    }
-
-    //印出升級資訊
-    public void printUpgrade() {
-
-    }
 }
+
+    
+    
+
+    
+    
+  
+    
+    

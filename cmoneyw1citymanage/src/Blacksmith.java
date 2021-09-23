@@ -13,37 +13,25 @@ public class Blacksmith extends Building {
         this.setNumber(6);
         //建築名稱
         this.setName("兵工廠");
-        //建築等級
-        this.setBuildingLevel(1);
-        //建築滿血生命值
-        setLifeFull(30);
-        //建築當前生命值
-        setLife(getLifeFull());
+        //建築生命值
+        setLife(30);
         //建造所需資源
         this.setBuildResource(new Resource(30, 10, 0));
-        //建築狀態
-        this.setBuildCheck(Building.BuildCheck.BUILDABLE);
         //建造所需時間
         setInitialBuildTime(3);
         //建築剩餘時間
         setBuildNeedTime(getInitialBuildTime());
-        //建築建好時間
-        this.setBuildTime(-1);
         //建造需要文明等級
         this.setNeedCivilLevel(2);
         //升級所需資源
         this.setUpgradeResource(new Resource(70, 40, 0));
-        //升級狀態
-        this.setUpgradeCheck(Building.UpgradeCheck.NOTUPGRADEABLE);
-        //建築物功能開關
-        this.setOnOff(false);
         //升級需要文明等級
         this.setUpNeedCivilLevel(2);
-        //可否升級
-        this.setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
-        //升級所需時間
-        this.setUpgradeNeedTime(48);
 
+        //升級所需時間
+        this.setUpgradeResetTime(48);
+        //升級剩餘時間
+        this.setUpgradeNeedTime(getUpgradeResetTime());
 
         //起始士兵等級是1
         armyLevel = 1;
@@ -59,11 +47,12 @@ public class Blacksmith extends Building {
         this.armyLevel++;
         upgradeReset();
         setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
+        setArmyIsUpgrading(false);
     }
 
-    public int getArmyLevel() {
-        return armyLevel;
-    }
+//    public int getArmyLevel() {
+//        return armyLevel;
+//    }
 
     public int getArmyLife() {
         armyLife = armyLevel * 3 - 1;
@@ -73,18 +62,19 @@ public class Blacksmith extends Building {
     //升級飛機>>飛機等級+1
     //飛機生命值改動
     public void upgradeAircraft() {
+        this.aircraftLevel++;
         upgradeReset();
         setUpgradeCheck(UpgradeCheck.UPGRADEABLE);
-        this.aircraftLevel++;
+        setAirCraftIsUpgrading(false);
     }
 
-    public int getAircraftLevel() {
-        return aircraftLevel;
-    }
+//    public int getAircraftLevel() {
+//        return aircraftLevel;
+//    }
 
     public int getAircraftLife() {
         //飛機生命值=飛機等級*2
-        aircraftLife = this.getAircraftLevel() * 2;
+        aircraftLife = aircraftLevel * 2;
         return aircraftLife;
     }
 

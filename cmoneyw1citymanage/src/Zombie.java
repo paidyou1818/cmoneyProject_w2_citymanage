@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Zombie {
@@ -75,13 +74,11 @@ public class Zombie {
                     airValue -= buildingIsAttacked.getLife();
                     showAttacked(buildingIsAttacked);
                     System.out.println(buildingIsAttacked.getName() + "已被殭屍摧毀!!!");
-                    buildingIsAttacked.setLife(0);
-                    buildingIsAttacked.setBuildCheck(Building.BuildCheck.BUILDABLE);
-                    buildingIsAttacked.setOnOff(false);
                     buildingIsAttacked.buildReset();
                     //要記得房屋毀壞要做的事
                 } else {
                     showAttacked(buildingIsAttacked);
+                    airValue = 0;
                     System.out.println("雖然被攻擊但建築沒事!!");
                 }
             }
@@ -127,14 +124,12 @@ public class Zombie {
                 if (landValue >= buildingIsAttacked.getLife()) {
                     landValue -= buildingIsAttacked.getLife();
                     showAttacked(buildingIsAttacked);
-                    buildingIsAttacked.setLife(0);
                     System.out.println(buildingIsAttacked.getName() + "已被殭屍摧毀!!!");
-                    buildingIsAttacked.setBuildCheck(Building.BuildCheck.BUILDABLE);
-                    buildingIsAttacked.setOnOff(false);
                     buildingIsAttacked.buildReset();
                     //要記得房屋毀壞要做的事
                 } else {
                     showAttacked(buildingIsAttacked);
+                    landValue = 0;
                     System.out.println("雖然被攻擊但建築沒事!!");
                 }
             }
@@ -165,7 +160,6 @@ public class Zombie {
         System.out.println("市民: " + unit.getVillagerCount() + "\t士兵: " + unit.getArmyCount() + "\t飛機: " + unit.getAircraftCount());
         System.out.println("當前木頭: " + resource.getWood() + "\t當前鐵礦: " + resource.getSteel() + "\t當前瓦斯: " + resource.getGas());
         System.out.println("採集wood: " + resource.getWoodPeople() + "人" + " 採集steel: " + resource.getSteelPeople() + "人");
-        System.out.println("遭受攻擊建築物:");
         System.out.println();
     }
 
