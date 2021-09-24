@@ -10,7 +10,7 @@ public class AirFactory extends Building {
         //建築編號
         this.setNumber(8);
         //建築名稱
-        this.setName("飛機工廠");
+        this.setName("飛機廠");
         //建築生命值
         setLife(50);
         //建造所需資源
@@ -59,7 +59,7 @@ public class AirFactory extends Building {
     @Override
     public void printBuild() {
         System.out.println(getNumber() + "." + getName() +
-                ":(建造成本: 木材 " + getBuildResource().getWood() +
+                "\t:(建造成本: 木材 " + getBuildResource().getWood() +
                 " 鋼鐵 " + getBuildResource().getSteel() +
                 " 瓦斯 " + getBuildResource().getGas() +
                 " 所需文明等級: " + getNeedCivilLevel() +
@@ -70,7 +70,7 @@ public class AirFactory extends Building {
     //印出升級資訊
     public void printUpgrade() {
         System.out.println(getNumber() + "." + getName() +
-                ":(升級成本: 木材 " + getUpgradeResource().getWood() +
+                "\t:(升級成本: 木材 " + getUpgradeResource().getWood() +
                 " 鋼鐵 " + getUpgradeResource().getSteel() +
                 " 瓦斯 " + getUpgradeResource().getGas() +
                 " 所需文明等級: " + getUpNeedCivilLevel() +

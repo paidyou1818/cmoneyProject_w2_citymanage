@@ -7,7 +7,7 @@ public class Zombie {
     private int wave; //殭屍第幾波
     private int airValue;
     private int landValue;
-    private Random random = new Random();
+    private  final Random random = new Random();
 
     public int getWave() {
         return wave;
@@ -26,14 +26,14 @@ public class Zombie {
         int zombieF = 25;
 
         landValue = (wave * 3) * zombieA + (wave / 10 * 5) * zombieB + (wave / 10 * 4) * zombieC +
-                (wave / 10 * 3) * zombieD + (wave / 10 * 2) * zombieE + (wave / 10 * 1) * zombieF;
+                (wave / 10 * 3) * zombieD + (wave / 10 * 2) * zombieE + (wave / 10) * zombieF;
         return landValue;
     }
 
     public int getZombieAirValue() {
         int zombieFly = 2; //飛行殭屍
         int zombieBigFly = 4; //飛行大僵屍
-        airValue = (wave - 7 * 1 * zombieFly) + ((wave - 7 / 2 * 1) * zombieBigFly);
+        airValue = (wave - 7) * zombieFly + (wave - 7) / 2 * zombieBigFly;
         return airValue;
     }
 

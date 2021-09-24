@@ -98,9 +98,9 @@ public class Main {
                 }
                 case 6: {
                     System.out.println("請選擇要開關的建築物:\n");
-                    System.out.println("1.房屋     當前是否開啟中:" + newStatus.getBuildingList().get(0).isOnOff());
-                    System.out.println("3.軍營     當前是否開啟中:" + newStatus.getBuildingList().get(2).isOnOff());
-                    System.out.println("8.飛機工廠  當前是否開啟中:" + newStatus.getBuildingList().get(7).isOnOff());
+                    System.out.println("1." + newStatus.getBuildingList().get(0).getName() + "\t當前是否開啟中:" + newStatus.getBuildingList().get(0).isOnOff());
+                    System.out.println("3." + newStatus.getBuildingList().get(2).getName() + "\t當前是否開啟中:" + newStatus.getBuildingList().get(2).isOnOff());
+                    System.out.println("8." + newStatus.getBuildingList().get(7).getName() + "\t當前是否開啟中:" + newStatus.getBuildingList().get(7).isOnOff());
                     int choice = input.openCloseNumber();
                     System.out.println("請選擇要開啟或關閉 1.開啟  2.關閉");
                     int openOrClose = input.numberInput(1, 2);

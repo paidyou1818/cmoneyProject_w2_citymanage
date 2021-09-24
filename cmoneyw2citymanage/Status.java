@@ -100,6 +100,8 @@ public class Status {
                 if (!isGameOver()) {
                     System.out.println("抵禦成功! 請重新分配市民\n");
                     distribute();
+                } else {
+                    break;
                 }
             }
         }
