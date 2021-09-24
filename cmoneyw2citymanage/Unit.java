@@ -1,5 +1,3 @@
-
-
 public class Unit {
     private int villagerCount = 20;//村民人數
     private int armyCount = 10; //士兵人數

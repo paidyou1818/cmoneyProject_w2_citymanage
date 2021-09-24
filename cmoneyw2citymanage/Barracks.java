@@ -1,60 +1,74 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
- *
  * @author kisso
  */
-public class Barracks extends Building{
+public class Barracks extends Building {
     private int armyGenRate; //生產士兵速率
 
 
-
-    public Barracks(){
+    public Barracks() {
         //建築編號
         setNumber(3);
         //建築名稱
-        setName("軍營");
-        //建築等級
-        setBuildingLevel(1);
-        //建築滿血生命值
-        setLifeFull(30);
-        //建築當前生命值
-        setLife(getLifeFull());
+        setName("軍營 ");
+        //建築生命值
+        setLife(30);
         //建造所需資源
-        setBuildResource(new Resource(20,10,0));
-        //建築狀態
-        setBuildCheck(Building.BuildCheck.BUILDABLE);
+        setBuildResource(new Resource(20, 10, 0));
         //建造所需時間
         setInitialBuildTime(2);
         //建築剩餘時間
         setBuildNeedTime(getInitialBuildTime());
-        //建築建好時間
-        setBuildTime(-1);
-        //建造需要文明等級
-        setNeedCivilLevel(1);
         //升級所需資源
-        setUpgradeResource(new Resource(30,15,0));
-        //升級狀態
-        setUpgradeCheck(Building.UpgradeCheck.UPGRADEABLE);
+        setUpgradeResource(new Resource(30, 15, 0));
         //升級所需時間
-        this.setUpgradeResetTime(30);
+        this.setUpgradeResetTime(5);
         //升級剩餘時間
         this.setUpgradeNeedTime(getUpgradeResetTime());
-        //建築物功能開關
-        setOnOff(false);
         //自動生產消耗資源
-        setEffectResource(new Resource(2,2,0));
+        setEffectResource(new Resource(2, 2, 0));
         //升級需要文明等級
         setUpNeedCivilLevel(2);
-
+        //生產士兵頻率
+        setGenFrequency(2);
     }
 
-    public int getArmyGenRate() {
-        armyGenRate = getBuildingLevel()*2-1;
-        return armyGenRate;
+    @Override
+    public int getRate() {
+        if (this.getBuildCheck() == BuildCheck.UNBUILDABLE) {
+            armyGenRate = getBuildingLevel() * 2 - 1;
+            return armyGenRate;
+        }
+        return 0;
+    }
+
+    /**
+     * 印出建造資訊
+     *
+     * @return 印出建造資訊
+     */
+    @Override
+    public void printBuild() {
+        System.out.println(getNumber() + "." + getName() +
+                "\t:(建造成本: 木材 " + getBuildResource().getWood() +
+                " 鋼鐵 " + getBuildResource().getSteel() +
+                " 瓦斯 " + getBuildResource().getGas() +
+                " 所需文明等級: " + getNeedCivilLevel() +
+                " )\t功能：每" + getGenFrequency() + "小時消耗" + getEffectResource().getWood() + "木材" +
+                " " + getEffectResource().getSteel() + "鋼鐵" +
+                "，產生" + getBuildingLevel() + "個士兵");
+    }
+
+    //印出升級資訊
+    @Override
+    public void printUpgrade() {
+        System.out.println(getNumber() + "." + getName() +
+                "\t:(升級成本: 木材 " + getUpgradeResource().getWood() +
+                " 鋼鐵 " + getUpgradeResource().getSteel() +
+                " 瓦斯 " + getUpgradeResource().getGas() +
+                " 所需文明等級: " + getUpNeedCivilLevel() +
+                " )\t升級功能:每" + getGenFrequency() + "小時消耗" + getEffectResource().getWood() + "木材" +
+                " " + getEffectResource().getSteel() + "鋼鐵" +
+                "，產生" + (this.getBuildingLevel() + 1) + "個士兵");
     }
 }

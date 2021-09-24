@@ -1,4 +1,5 @@
 
+
 /**
  * 建造一個起始資源類別
  */
@@ -9,20 +10,17 @@ public class Resource {
     private int woodPeople = 0;//採集木材人數
     private int steelPeople = 0;//採集鋼鐵人數
 
-    private int woodRate = 3;//採集木材效率
-    private int steelRate = 1;//採集鋼鐵效率
-    private int gasRate = 5;//採集瓦斯效率
-
     public Resource(int wood, int steel, int gas) {
         this.gas = gas;
         this.steel = steel;
         this.wood = wood;
     }
+
     public Resource() {
 
     }
 
-    
+
     public int getWood() {
         return wood;
     }
@@ -63,43 +61,26 @@ public class Resource {
         this.steelPeople = steelPeople;
     }
 
-    public int getWoodRate() {
-        return woodRate;
-    }
-
-    public void setWoodRate(int woodRate) {
-        this.woodRate = woodRate;
-    }
-
-    public int getSteelRate() {
-        return steelRate;
-    }
-
-    public void setSteelRate(int steelRate) {
-        this.steelRate = steelRate;
-    }
-
-    public int getGasRate() {
-        return gasRate;
-    }
-
-    public void setGasRate(int gasRate) {
-        this.gasRate = gasRate;
-    }
 
     public void addGas(int value) {
         gas += value;
+        if (gas == 0 && value < 0) {
+            System.out.println("已無瓦斯");
+        }
     }
 
     public void addWood(int value) {
         wood += value;
-        if (wood == 0) {
+        if (wood == 0 && value < 0) {
             System.out.println("已無木材");
         }
     }
 
     public void addSteel(int value) {
         steel += value;
+        if (steel == 0 && value < 0) {
+            System.out.println("已無鋼鐵");
+        }
     }
 
     public void addWoodPeople(int value) {
@@ -123,6 +104,6 @@ public class Resource {
     }
 
     public String toString() {
-        return "木材:" + wood + " 鋼鐵:" + steel + " 瓦斯:" + gas;
+        return "當前資源:  木材:" + wood + " 鋼鐵:" + steel + " 瓦斯:" + gas;
     }
 }
